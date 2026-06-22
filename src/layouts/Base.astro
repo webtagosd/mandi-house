@@ -1,0 +1,181 @@
+---
+import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Mandi House · Yemeni Fire-Feast, Sandringham",
+  description = "Slow-smoked Yemeni mandi, saffron rice and a platter built to share. Sandringham, Auckland. Open late, seven nights.",
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=DM+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <ClientRouter />
+  </head>
+  <body class="bg-ink text-cream antialiased">
+    <slot />
+
+    <!-- Motion foundation: Lenis smooth scroll + GSAP + reveals -->
+    <script>
+      import Lenis from "lenis";
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      const isTouch = window.matchMedia("(hover: none)").matches;
+
+      let lenis: any = null;
+      let rafId = 0;
+
+      function initLenis() {
+        if (reduceMotion || isTouch) return;
+        if (lenis) return; // guard against double init on re-navigation
+        lenis = new Lenis({
+          duration: 1.1,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+        });
+        (window as any).__lenis = lenis;
+
+        // Keep ScrollTrigger in sync, and drive Lenis with its own RAF loop.
+        lenis.on("scroll", ScrollTrigger.update);
+        const raf = (time: number) => {
+          lenis.raf(time);
+          rafId = requestAnimationFrame(raf);
+        };
+        rafId = requestAnimationFrame(raf);
+      }
+
+      // Scroll-reveal via IntersectionObserver
+      function initReveals() {
+        const els = document.querySelectorAll<HTMLElement>("[data-reveal]");
+        if (reduceMotion) {
+          els.forEach((el) => el.classList.add("is-visible"));
+          return;
+        }
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -8% 0px" }
+        );
+        els.forEach((el) => io.observe(el));
+      }
+
+      // Page-load choreography — hero words + nav stagger.
+      // Pure CSS-transition toggle (not GSAP): idempotent under a double
+      // astro:page-load, and not dependent on font-load height the way
+      // GSAP yPercent is. Each element gets a staggered transition-delay.
+      function initLoad() {
+        const loadEls = Array.from(
+          document.querySelectorAll<HTMLElement>("[data-load]")
+        );
+        if (!loadEls.length) return;
+        loadEls.forEach((el, i) => {
+          el.style.transitionDelay = reduceMotion ? "0s" : `${0.15 + i * 0.1}s`;
+        });
+        // double-rAF so the initial hidden state is painted before we toggle
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() =>
+            loadEls.forEach((el) => el.classList.add("is-loaded"))
+          )
+        );
+      }
+
+      // Smooth-scroll same-page anchors via Lenis; handle arriving with a hash.
+      function scrollToHash(hash: string) {
+        if (!hash || hash === "#") return;
+        const el = document.querySelector(hash);
+        if (!el) return;
+        if (lenis && !reduceMotion) {
+          lenis.scrollTo(el as HTMLElement, { offset: 0, duration: 1.2 });
+        } else {
+          (el as HTMLElement).scrollIntoView({
+            behavior: reduceMotion ? "auto" : "smooth",
+          });
+        }
+      }
+
+      function initAnchors() {
+        document
+          .querySelectorAll<HTMLAnchorElement>('a[href*="#"]')
+          .forEach((a) => {
+            const url = new URL(a.href, location.href);
+            if (url.pathname !== location.pathname) return; // different page
+            const hash = url.hash;
+            if (!hash || hash === "#") return;
+            a.addEventListener("click", (e) => {
+              if (!document.querySelector(hash)) return;
+              e.preventDefault();
+              scrollToHash(hash);
+              history.replaceState(null, "", hash);
+            });
+          });
+      }
+
+      function setup() {
+        initLenis();
+        initReveals();
+        initLoad();
+        initAnchors();
+        // If we arrived on a hash (e.g. /#visit from the Menu page), scroll to it.
+        if (location.hash) {
+          requestAnimationFrame(() =>
+            requestAnimationFrame(() => scrollToHash(location.hash))
+          );
+        }
+      }
+
+      function teardown() {
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+        if (lenis) {
+          lenis.destroy();
+          lenis = null;
+          (window as any).__lenis = null;
+        }
+        ScrollTrigger.getAll().forEach((t) => t.kill());
+      }
+
+      // Astro View Transitions lifecycle
+      document.addEventListener("astro:page-load", setup);
+      document.addEventListener("astro:before-swap", teardown);
+    </script>
+  </body>
+</html>

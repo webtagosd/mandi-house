@@ -1,0 +1,186 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Mandi House — Nocturnal & Smoky
+   Palette: warm near-black charcoal, saffron-gold accent,
+   ember red (sparing), warm cream text.
+   ============================================================ */
+
+@theme {
+  /* Surfaces */
+  --color-ink: #0E0A06;        /* page background — warm near-black */
+  --color-charcoal: #16100A;   /* alternate dark block */
+  --color-espresso: #271A10;   /* warmer raised panel */
+  --color-coal: #0A0704;       /* deepest, footer */
+
+  /* Accent + energy */
+  --color-saffron: #E3A53A;    /* the fire — primary accent */
+  --color-brass: #BE8E45;      /* metallic, dividers-on-dark, hover */
+  --color-ember: #A8331A;      /* deep ember red — use sparingly */
+
+  /* Text */
+  --color-cream: #F1E7D3;      /* primary text on dark */
+  --color-fog: #A2917A;        /* muted body / secondary text */
+
+  /* Fonts */
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-mono: "DM Mono", ui-monospace, "SF Mono", monospace;
+
+  /* Easings */
+  --ease-sigmoid: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-sharp-out: cubic-bezier(0.4, 0, 0.6, 1);
+
+  /* Durations */
+  --duration-micro: 150ms;
+  --duration-fast: 250ms;
+  --duration-base: 400ms;
+  --duration-slow: 800ms;
+}
+
+/* ---------- Base ---------- */
+
+html {
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Lenis requires no overflow:hidden on html/body for sticky to work */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-saffron);
+  color: var(--color-ink);
+}
+
+/* Playfair Display for big editorial display type */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.005em;
+  line-height: 1.0;
+}
+
+/* ---------- Type utilities ---------- */
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-saffron);
+}
+
+.body-lg {
+  font-size: clamp(1.05rem, 1.4vw, 1.35rem);
+  line-height: 1.65;
+  color: var(--color-fog);
+}
+
+/* ---------- Scroll reveal ---------- */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--duration-slow) var(--ease-sigmoid),
+    transform var(--duration-slow) var(--ease-sigmoid);
+  will-change: opacity, transform;
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-reveal-delay="1"] { transition-delay: 0.08s; }
+[data-reveal-delay="2"] { transition-delay: 0.16s; }
+[data-reveal-delay="3"] { transition-delay: 0.24s; }
+[data-reveal-delay="4"] { transition-delay: 0.32s; }
+
+/* ---------- Page-load choreography ---------- */
+
+[data-load] {
+  opacity: 0;
+  transform: translateY(110%);
+  transition:
+    opacity var(--duration-slow) var(--ease-sigmoid),
+    transform var(--duration-slow) var(--ease-sigmoid);
+  will-change: opacity, transform;
+}
+[data-load].is-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hairline {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(190, 142, 69, 0.4),
+    transparent
+  );
+}
+
+/* ---------- Steam / smoke drift (CSS placeholder for hero) ---------- */
+
+@keyframes drift {
+  0%   { transform: translate3d(-2%, 0, 0) scale(1);   opacity: 0.5; }
+  50%  { transform: translate3d(2%, -4%, 0) scale(1.08); opacity: 0.8; }
+  100% { transform: translate3d(-2%, 0, 0) scale(1);   opacity: 0.5; }
+}
+.steam {
+  animation: drift 14s var(--ease-sigmoid) infinite;
+  filter: blur(40px);
+  will-change: transform, opacity;
+}
+.steam-2 { animation-duration: 20s; animation-delay: -6s; }
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-load] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .steam { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- Link underline animation ---------- */
+
+.link-underline {
+  position: relative;
+}
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--duration-base) var(--ease-sigmoid);
+}
+.link-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}

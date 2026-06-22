@@ -1,0 +1,58 @@
+---
+// Magazine-style review spread.
+// PLACEHOLDER QUOTES — replace with real Google reviews before pitch/launch.
+// (Skill rule: real reviews only. These are stand-ins to show the layout.)
+const reviews = [
+  {
+    quote:
+      "The lamb mandi falls apart and the rice is unreal. Biggest portions in Sandringham, we always over-order.",
+    name: "[PLACEHOLDER_REVIEW_1]",
+    meta: "Google review",
+  },
+  {
+    quote:
+      "Found my new late-night spot. Generous, properly spiced, and the bread comes out hot.",
+    name: "[PLACEHOLDER_REVIEW_2]",
+    meta: "Google review",
+  },
+  {
+    quote:
+      "Ordered the whole lamb leg for a birthday. Whole table went quiet. That good.",
+    name: "[PLACEHOLDER_REVIEW_3]",
+    meta: "Google review",
+  },
+];
+---
+
+<section class="relative z-10 bg-ink px-6 md:px-12 py-28 md:py-40">
+  <div class="mx-auto max-w-[110rem]">
+    <div class="flex items-baseline justify-between gap-6 mb-16">
+      <p class="kicker" data-reveal>[ 03 · Word of Mouth ]</p>
+      <span class="font-mono text-sm text-fog" data-reveal>★★★★★</span>
+    </div>
+
+    <blockquote class="border-t border-brass/15 pt-12 mb-12" data-reveal>
+      <p class="font-display font-light text-cream text-3xl md:text-5xl xl:text-6xl leading-[1.1] max-w-5xl">
+        “{reviews[0].quote.replace(/^"|"$/g, "")}”
+      </p>
+      <footer class="mt-8 font-mono text-sm tracking-widest uppercase text-saffron">
+        {reviews[0].name} <span class="text-fog">· {reviews[0].meta}</span>
+      </footer>
+    </blockquote>
+
+    <div class="grid md:grid-cols-2 gap-8 border-t border-brass/15 pt-12">
+      {
+        reviews.slice(1).map((r) => (
+          <blockquote data-reveal>
+            <p class="font-display font-light text-cream text-xl md:text-2xl leading-snug">
+              “{r.quote}”
+            </p>
+            <footer class="mt-5 font-mono text-xs tracking-widest uppercase text-saffron">
+              {r.name} <span class="text-fog">· {r.meta}</span>
+            </footer>
+          </blockquote>
+        ))
+      }
+    </div>
+  </div>
+</section>

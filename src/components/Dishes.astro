@@ -1,0 +1,101 @@
+---
+// Editorial signature-dish grid. Image areas are warm gradient placeholders;
+// drop real top-down dish photos into the .dish-img blocks when imagery lands.
+// PRICES ARE PLACEHOLDERS — confirm with Mandi House before pitch.
+const dishes = [
+  {
+    n: "01",
+    name: "Chicken Mandi",
+    desc: "Smoke-roasted chicken on a bed of saffron basmati, slow-cooked over charcoal.",
+    price: "$19",
+    span: "md:col-span-3 md:row-span-2",
+    tone: "from-[#3a2510] to-[#1a1109]",
+    big: true,
+  },
+  {
+    n: "02",
+    name: "Lamb Mandi",
+    desc: "Fall-apart lamb, aromatic rice, fried onion and a dusting of mixed spice.",
+    price: "$24",
+    span: "md:col-span-3",
+    tone: "from-[#3a1c12] to-[#1a0f09]",
+  },
+  {
+    n: "03",
+    name: "Mixed Grill",
+    desc: "Charcoal skewers: kebab, tikka and wings, off the open fire.",
+    price: "$26",
+    span: "md:col-span-3",
+    tone: "from-[#2c1e0e] to-[#160e07]",
+  },
+  {
+    n: "04",
+    name: "Zafrani Biryani",
+    desc: "Weekend special. Layered saffron biryani, deep with spice.",
+    price: "$22",
+    span: "md:col-span-2",
+    tone: "from-[#34240f] to-[#170f08]",
+  },
+  {
+    n: "05",
+    name: "Lamb Paya",
+    desc: "Slow-simmered overnight broth, served with fresh bread.",
+    price: "$18",
+    span: "md:col-span-2",
+    tone: "from-[#331a10] to-[#150d08]",
+  },
+  {
+    n: "06",
+    name: "Whole Lamb Leg",
+    desc: "The centrepiece. Built for the table. Order ahead.",
+    price: "POA",
+    span: "md:col-span-2",
+    tone: "from-[#3d2912] to-[#1a1009]",
+  },
+];
+---
+
+<section class="relative z-10 bg-ink px-6 md:px-12 py-28 md:py-40">
+  <div class="mx-auto max-w-[110rem]">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-16 md:mb-20">
+      <div>
+        <p class="kicker mb-5" data-reveal>[ 01 · From the Fire ]</p>
+        <h2 class="font-display font-light text-cream text-5xl md:text-7xl leading-[0.95]" data-reveal>
+          The platters<br /><span class="italic text-saffron">people drive for.</span>
+        </h2>
+      </div>
+      <a href="/menu" class="link-underline font-mono uppercase tracking-widest text-sm text-cream/80 shrink-0" data-reveal>
+        Full menu →
+      </a>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-6 gap-4 md:auto-rows-[200px]">
+      {
+        dishes.map((d) => (
+          <article
+            class:list={[
+              "dish group relative overflow-hidden rounded-2xl border border-brass/15 flex flex-col justify-end p-6 md:p-8 min-h-[200px]",
+              d.span,
+            ]}
+            data-reveal
+          >
+            <div
+              class:list={["dish-img absolute inset-0 bg-gradient-to-br opacity-90 transition-transform duration-700 group-hover:scale-105", d.tone]}
+            />
+            <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(14,10,6,0.85), rgba(14,10,6,0.1) 60%);" />
+            <div class="relative z-10">
+              <span class="font-mono text-xs text-saffron/80 tracking-widest block mb-3">{d.n}</span>
+              <div class="flex items-baseline justify-between gap-4 mb-2">
+                <h3 class:list={["font-display font-light text-cream", d.big ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl"]}>
+                  {d.name}
+                </h3>
+                <span class="font-mono text-sm text-saffron whitespace-nowrap">{d.price}</span>
+              </div>
+              <p class="text-fog text-sm leading-relaxed max-w-sm">{d.desc}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

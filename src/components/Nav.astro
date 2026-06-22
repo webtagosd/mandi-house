@@ -1,0 +1,124 @@
+---
+// Shared nav. `solid` forces an opaque background (use on the Menu page).
+interface Props {
+  solid?: boolean;
+}
+const { solid = false } = Astro.props;
+
+// Single-page anchors live on "/"; Menu is its own page.
+const links = [
+  { href: "/#story", label: "Story" },
+  { href: "/menu", label: "Menu" },
+  { href: "/#visit", label: "Visit" },
+];
+---
+
+<header
+  id="site-nav"
+  class:list={[
+    "fixed top-0 left-0 right-0 z-50 transition-colors duration-500",
+    solid ? "bg-ink/90 backdrop-blur-md border-b border-brass/15" : "",
+  ]}
+  data-solid={solid}
+>
+  <nav class="mx-auto max-w-[110rem] px-6 md:px-12 h-20 flex items-center justify-between">
+    <a href="/" class="block shrink-0" aria-label="Mandi House — home">
+      <img
+        src="/images/logo.png"
+        alt="Mandi House"
+        width="812"
+        height="444"
+        class="h-12 md:h-14 w-auto"
+      />
+    </a>
+
+    <div class="hidden md:flex items-center gap-10">
+      {
+        links.map((l) => (
+          <a
+            href={l.href}
+            class="link-underline text-sm tracking-wide uppercase font-mono text-cream/80 hover:text-cream"
+          >
+            {l.label}
+          </a>
+        ))
+      }
+      <a
+        href="https://www.ordermeal.co.nz/mandi-house/"
+        target="_blank"
+        rel="noopener"
+        class="text-xs font-mono uppercase tracking-widest px-6 py-2.5 bg-saffron text-ink rounded-full hover:bg-cream transition-colors duration-300"
+      >
+        Order Now
+      </a>
+    </div>
+
+    <!-- Mobile -->
+    <button
+      id="nav-toggle"
+      class="md:hidden text-cream w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+      aria-label="Open menu"
+    >
+      <span class="block w-6 h-px bg-cream transition-transform"></span>
+      <span class="block w-6 h-px bg-cream transition-transform"></span>
+    </button>
+  </nav>
+
+  <!-- Mobile drawer -->
+  <div
+    id="nav-drawer"
+    class="md:hidden hidden flex-col bg-ink/97 backdrop-blur-md border-t border-brass/15 px-6 py-8 gap-6"
+  >
+    {
+      links.map((l) => (
+        <a href={l.href} class="font-display text-3xl text-cream nav-link">
+          {l.label}
+        </a>
+      ))
+    }
+    <a
+      href="https://www.ordermeal.co.nz/mandi-house/"
+      target="_blank"
+      rel="noopener"
+      class="mt-3 inline-block text-xs font-mono uppercase tracking-widest px-6 py-3 bg-saffron text-ink rounded-full self-start"
+    >
+      Order Now
+    </a>
+  </div>
+</header>
+
+<script>
+  function bindNav() {
+    const toggle = document.getElementById("nav-toggle");
+    const drawer = document.getElementById("nav-drawer");
+    const nav = document.getElementById("site-nav");
+    if (!toggle || !drawer || !nav) return;
+
+    toggle.addEventListener("click", () => {
+      drawer.classList.toggle("hidden");
+      drawer.classList.toggle("flex");
+    });
+
+    // Close the mobile drawer on any nav link tap
+    drawer.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => {
+        drawer.classList.add("hidden");
+        drawer.classList.remove("flex");
+      })
+    );
+
+    // Translucent → solid on scroll, but only when not forced solid
+    if (nav.dataset.solid !== "true") {
+      const onScroll = () => {
+        if (window.scrollY > 40) {
+          nav.classList.add("bg-ink/90", "backdrop-blur-md", "border-b", "border-brass/15");
+        } else {
+          nav.classList.remove("bg-ink/90", "backdrop-blur-md", "border-b", "border-brass/15");
+        }
+      };
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+    }
+  }
+  document.addEventListener("astro:page-load", bindNav);
+</script>

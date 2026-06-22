@@ -1,0 +1,46 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="relative z-10 bg-coal px-6 md:px-12 pt-24 pb-10 border-t border-brass/15">
+  <div class="mx-auto max-w-[110rem]">
+    <!-- Wordmark signoff -->
+    <p class="kicker mb-6">[ Sandringham · Auckland ]</p>
+    <h2 class="font-display text-[15vw] md:text-[11vw] leading-[0.85] text-cream/95 -tracking-[0.03em] mb-16">
+      Come hungry<span class="text-saffron">.</span>
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 border-t border-brass/15 pt-12">
+      <div>
+        <p class="kicker mb-4">Visit</p>
+        <p class="text-cream/80 leading-relaxed text-sm">
+          573 Sandringham Road<br />Sandringham<br />Auckland 1025
+        </p>
+      </div>
+      <div>
+        <p class="kicker mb-4">Hours</p>
+        <p class="text-cream/80 leading-relaxed text-sm">
+          Mon–Thu · 5pm–11pm<br />
+          Fri · 5pm–12am<br />
+          Sat–Sun · 12pm–12am
+        </p>
+      </div>
+      <div>
+        <p class="kicker mb-4">Contact</p>
+        <a href="tel:098451144" class="link-underline block text-cream/80 text-sm mb-2">09 845 1144</a>
+        <a href="/#visit" class="link-underline block text-cream/80 text-sm">Find us</a>
+      </div>
+      <div>
+        <p class="kicker mb-4">More</p>
+        <a href="/menu" class="link-underline block text-cream/80 text-sm mb-2">Menu</a>
+        <a href="/#story" class="link-underline block text-cream/80 text-sm mb-2">Our Story</a>
+        <a href="/#visit" class="link-underline block text-cream/80 text-sm">Find us</a>
+      </div>
+    </div>
+
+    <div class="mt-16 flex flex-col md:flex-row justify-between gap-4 text-xs text-fog font-mono">
+      <span>© {year} Mandi House. All rights reserved.</span>
+      <a href="https://webtag.co.nz" target="_blank" rel="noopener" class="link-underline hover:text-cream transition-colors">Website created by webtag.co.nz</a>
+    </div>
+  </div>
+</footer>

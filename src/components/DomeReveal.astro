@@ -1,0 +1,159 @@
+---
+// SIGNATURE MOMENT — the dome reveal.
+// A copper sahn (serving dome) lifts as the user scrolls and the real mandi
+// platter is revealed beneath, steam and all. Scroll-scrubbed via GSAP.
+---
+
+<section
+  id="dome-reveal"
+  class="relative bg-charcoal overflow-hidden"
+  aria-label="The unveiling of the mandi"
+>
+  <div id="dome-stage" class="h-[100svh] min-h-[620px] flex flex-col items-center justify-center px-6">
+    <p class="kicker mb-6 text-center">[ 04 · The Unveiling ]</p>
+
+    <!-- caption that crossfades -->
+    <div class="relative h-16 md:h-20 w-full max-w-3xl text-center mb-2">
+      <h2
+        id="cap-1"
+        class="absolute inset-0 font-display font-light text-cream text-4xl md:text-6xl leading-tight flex items-center justify-center"
+      >
+        Lift the lid.
+      </h2>
+      <h2
+        id="cap-2"
+        class="absolute inset-0 font-display font-light text-saffron italic text-4xl md:text-6xl leading-tight flex items-center justify-center opacity-0"
+      >
+        Saffron, smoke and slow fire.
+      </h2>
+    </div>
+
+    <!-- The dish stage -->
+    <div class="relative w-[min(92vw,720px)] aspect-[802/436]">
+      <!-- warm halo behind the plate -->
+      <div class="absolute -inset-[35%] pointer-events-none" style="background: radial-gradient(ellipse 50% 56% at 50% 52%, rgba(158,102,40,0.5), transparent 70%);"></div>
+
+      <!-- the real platter (background removed), revealed beneath the lid -->
+      <img
+        id="platter-img"
+        src="/images/mandi-platter.webp"
+        alt="Mandi House whole-lamb mandi platter with saffron rice, kebabs, chicken, nuts, bread and sauces"
+        width="802"
+        height="436"
+        class="absolute inset-0 w-full h-full object-contain drop-shadow-[0_28px_38px_rgba(0,0,0,0.5)]"
+      />
+
+      <!-- steam rising off the food -->
+      <div id="steam" class="absolute left-[45%] -translate-x-1/2 top-[-16%] w-[32%] h-[66%] pointer-events-none">
+        <svg viewBox="0 0 140 240" fill="none" class="w-full h-full overflow-visible">
+          <g fill="none" stroke="url(#steamG)" stroke-linecap="round">
+            <path class="wisp" style="animation-delay:0s;stroke-width:8" d="M50 232 C30 196 70 176 50 138 C36 112 64 92 50 58 C42 40 56 28 50 12" />
+            <path class="wisp" style="animation-delay:1.2s;stroke-width:9" d="M72 236 C52 198 92 176 72 136 C58 108 86 88 72 52 C64 34 78 22 72 8" />
+            <path class="wisp" style="animation-delay:2.4s;stroke-width:7" d="M94 232 C76 196 112 178 94 140 C80 114 106 94 94 60 C86 42 100 30 94 16" />
+          </g>
+          <defs>
+            <linearGradient id="steamG" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stop-color="#FBF4E4" stop-opacity="0.9" />
+              <stop offset="0.5" stop-color="#F1E7D3" stop-opacity="0.5" />
+              <stop offset="1" stop-color="#F1E7D3" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- the copper cloche lid, sized to the plate, lifts away -->
+      <div id="dome" class="absolute inset-0">
+        <svg viewBox="0 0 802 436" fill="none" aria-hidden="true" class="w-full h-full overflow-visible drop-shadow-[0_22px_34px_rgba(0,0,0,0.5)]">
+          <!-- shadow the lid casts on the table -->
+          <ellipse cx="401" cy="372" rx="340" ry="46" fill="#0A0704" opacity="0.45" />
+          <!-- dome body -->
+          <path d="M60 300 C60 70 742 70 742 300 Z" fill="url(#domeGrad)" />
+          <!-- front rim / base lip -->
+          <ellipse cx="401" cy="300" rx="341" ry="54" fill="url(#rimGrad)" />
+          <ellipse cx="401" cy="298" rx="312" ry="40" fill="#2c1f14" opacity="0.35" />
+          <!-- knob -->
+          <ellipse cx="401" cy="104" rx="23" ry="15" fill="url(#knobGrad)" />
+          <rect x="388" y="110" width="26" height="22" rx="6" fill="#8a6a32" />
+          <defs>
+            <linearGradient id="domeGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#cda45a" />
+              <stop offset="0.55" stop-color="#9a7333" /><stop offset="1" stop-color="#5d4220" />
+            </linearGradient>
+            <linearGradient id="rimGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#b78a44" /><stop offset="1" stop-color="#7c5b28" />
+            </linearGradient>
+            <radialGradient id="knobGrad" cx="0.4" cy="0.3" r="0.8">
+              <stop offset="0" stop-color="#f0d089" /><stop offset="1" stop-color="#9a7333" />
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .wisp {
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: bottom center;
+    filter: blur(2.5px);
+    animation: steam-rise 6s ease-in-out infinite;
+  }
+  @keyframes steam-rise {
+    0% { opacity: 0; transform: translateY(16px) scaleY(0.8); }
+    18% { opacity: 0.95; }
+    55% { opacity: 0.6; }
+    100% { opacity: 0; transform: translateY(-38px) scaleY(1.18); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wisp { animation: none; opacity: 0.4; transform: none; }
+  }
+</style>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  function initDome() {
+    const stage = document.getElementById("dome-stage");
+    const dome = document.getElementById("dome");
+    const img = document.getElementById("platter-img");
+    const steam = document.getElementById("steam");
+    const cap1 = document.getElementById("cap-1");
+    const cap2 = document.getElementById("cap-2");
+    if (!stage || !dome || !img) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      gsap.set(dome, { yPercent: -140, opacity: 0 });
+      gsap.set([img, steam], { opacity: 1, scale: 1 });
+      gsap.set(cap1, { opacity: 0 });
+      gsap.set(cap2, { opacity: 1 });
+      return;
+    }
+
+    gsap.set(img, { opacity: 0, scale: 0.94, transformOrigin: "50% 64%" });
+    gsap.set(steam, { opacity: 0 });
+
+    const tl = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#dome-reveal",
+        start: "top top",
+        end: "+=130%",
+        scrub: 1,
+        pin: "#dome-stage",
+        pinSpacing: true,
+      },
+    });
+
+    tl.to(img, { opacity: 1, scale: 1, ease: "none" }, 0)
+      .to(dome, { yPercent: -140, opacity: 0, ease: "none" }, 0)
+      .to(steam, { opacity: 1, ease: "none" }, 0.4)
+      .to(cap1, { opacity: 0, ease: "none" }, 0.3)
+      .to(cap2, { opacity: 1, ease: "none" }, 0.45);
+  }
+
+  document.addEventListener("astro:page-load", initDome);
+</script>

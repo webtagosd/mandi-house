@@ -1,0 +1,245 @@
+---
+import Base from "../layouts/Base.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+
+// Full Mandi House menu.
+const sections = [
+  {
+    id: "starters",
+    title: "Starters",
+    note: "To begin",
+    items: [
+      ["Chicken Salad", "Sliced chicken served with fresh salad and fries.", "$16.99"],
+      ["Lamb Salad", "Sliced lamb with salad and fries.", "$17.99"],
+      ["Chicken on Cheesy Fries", "Sliced chicken over cheesy fries.", "$17.99"],
+      ["Chicken on Fries", "Sliced chicken over fries.", "$16.99"],
+      ["Lamb on Cheesy Fries", "Sliced lamb over cheesy fries.", "$18.99"],
+      ["Lamb on Fries", "Sliced lamb over fries.", "$17.99"],
+      ["Mutton Shorba", "Traditional slow-cooked mutton soup with spices.", "$12.99"],
+      ["Harissa", "A classic Middle Eastern Ramadan dish of wheat and slow-cooked meat, known for its smooth texture.", "$20.00"],
+      ["Green Salad", "", "$12.99"],
+      ["Fries", "", "$12.99"],
+      ["Cheesy Fries", "", "$12.99"],
+    ],
+  },
+  {
+    id: "mandi",
+    title: "Mandi",
+    note: "Aromatic spiced rice",
+    desc: "Traditional dish of aromatic rice steamed with a rich, spiced lamb soup.",
+    items: [
+      ["Single Chicken Mandi", "One Maryland chicken piece over mandi rice. Serves 1.", "$22.99"],
+      ["Single Lamb Mandi", "Pieces of lamb on the bone over mandi rice. Serves 1.", "$24.99"],
+      ["Single Fish Mandi", "Boneless basa fish infused with authentic spices, over mandi rice. Serves 1.", "$27.99"],
+      ["Family Pack Chicken Mandi", "Four Maryland chicken pieces over mandi rice. Serves 3 to 4.", "$65.99"],
+      ["Family Pack Lamb Mandi", "Pieces of lamb on the bone over mandi rice. Serves 3 to 4.", "$69.99"],
+      ["Family Pack Mixed Mandi", "Maryland chicken and lamb pieces over mandi rice. Serves 3 to 4.", "$74.99"],
+      ["Family Pack Fish Mandi", "Boneless basa fish infused with authentic spices, over mandi rice. Serves 3 to 4.", "$80.00"],
+    ],
+  },
+  {
+    id: "grill",
+    title: "Grill Kebab Platters",
+    note: "Off the charcoal",
+    desc: "Flame-grilled platters seasoned with authentic Middle Eastern spices, prepared with fresh, hand-selected meat.",
+    items: [
+      ["Mixed Grill", "One lamb sheesh, one tikka chicken and one grill chicken skewer over mandi rice, with bread, salad and fries. Serves 1.", "$25.99"],
+      ["3 Lamb Sheesh Kebab", "Served over mandi rice with bread, salad and fries.", "$24.99"],
+      ["3 Tikka Chicken Skewers", "Served over mandi rice with bread, salad and fries.", "$23.99"],
+      ["3 Chicken Grill Skewers", "Served over mandi rice with bread, salad and fries.", "$23.99"],
+      ["Family Pack Mixed Grill", "Three lamb sheesh, three tikka chicken and three grill chicken skewers, with two bread, chips, tomato chutney, mandi rice and salad. Serves 3 to 4.", "$80.00"],
+      ["Jumbo Family Pack Mixed Mandi + Grill", "Maryland chicken and lamb pieces over mandi rice, plus three lamb sheesh, three tikka chicken and three grill chicken skewers, with four bread, chips, tomato chutney, rice and salad. Serves 8 to 10.", "$150.00"],
+      ["Jumbo Max Family Pack Mixed Mandi + Grill", "Everything in the Jumbo, plus Arabian karahi chicken. Serves 8 to 10.", "$175.00"],
+    ],
+  },
+  {
+    id: "steak",
+    title: "Steak Platters",
+    note: "Plated & grilled",
+    items: [
+      ["Grilled Chicken Steak", "Chicken breast with rice, salad, bread, tzatziki sauce and chips.", "$25.99"],
+      ["Grilled Lamb Shoulder", "Sliced lamb shoulder with rice, salad, bread, tzatziki sauce and chips.", "$26.99"],
+    ],
+  },
+  {
+    id: "karahi",
+    title: "Skewers & Karahi",
+    note: "Shenwari sauce",
+    desc: "Health-focused cuts with light spices, tailored to all dietary needs. Hand-selected meat, simple and delicious.",
+    items: [
+      ["2 Skewers with Shenwari Sauce", "Served with rice and bread.", "$29.99"],
+      ["2 Skewers with Butter Sauce", "Served with rice and bread.", "$29.99"],
+      ["Arabian Karahi Chicken", "Traditional karahi with bold spices, fresh herbs and authentic Arabian flavours. Served with rice and bread.", "$30.00"],
+      ["Arabian Karahi Goat", "Goat on the bone in bold spices and Arabian flavours. Served with rice and bread.", "$34.00"],
+      ["Arabian Butter Paneer", "Cottage cheese and mixed vegetables in butter sauce. Vegetarian. Served with rice and bread.", "$28.00"],
+    ],
+  },
+  {
+    id: "extras",
+    title: "Rice & Extras",
+    note: "Build your plate",
+    items: [
+      ["Mandi Rice", "", "$8.99"],
+      ["Maryland Chicken Piece", "Single piece.", "$11.99"],
+      ["Lamb Pieces", "", "$13.99"],
+      ["Lamb Sheesh Skewer", "", "$9.99"],
+      ["Tikka Chicken Skewer", "", "$9.99"],
+      ["Grill Chicken Skewer", "", "$9.99"],
+    ],
+  },
+  {
+    id: "bread",
+    title: "Bread",
+    note: "From the oven",
+    items: [
+      ["Chicken Calzone Bread", "Small, filled with chicken and cheese.", "$7.99"],
+      ["Lamb Calzone Bread", "Small, filled with lamb and cheese.", "$8.99"],
+      ["Small Round Bread", "With butter.", "$3.00"],
+      ["Garlic Bread", "", "$3.50"],
+      ["Bread Basket", "One butter, one garlic, one lamb mince, one chicken mince.", "$18.99"],
+    ],
+  },
+  {
+    id: "desserts",
+    title: "Desserts",
+    note: "Something sweet",
+    items: [
+      ["Nutella Baklawa", "Crispy pastry layered with Nutella and nuts.", "$7.99"],
+      ["Pistachio Baklawa", "Traditional pastry filled with pistachios.", "$7.99"],
+      ["Mandi House Special Dessert", "Our house specialty.", "$7.00"],
+    ],
+  },
+  {
+    id: "drinks",
+    title: "Drinks",
+    note: "Handcrafted",
+    items: [
+      ["Watermelon Cooler", "Monin watermelon syrup, mint, lime and soda water.", "$9.99"],
+      ["Pomegranate Fizz", "Monin pomegranate syrup, apple and lemon-lime soda.", "$9.99"],
+      ["Berries Blaster", "Monin blueberry, basil and lemon-lime soda.", "$9.99"],
+      ["Tropical Fizz", "Monin lychee, pineapple, lime and soda water.", "$9.99"],
+      ["Green Tea Pot", "A pot of green tea.", "$12.00"],
+    ],
+  },
+];
+---
+
+<Base title="Menu · Mandi House" description="Yemeni mandi, charcoal grills, karahi, biryani and slow broths. The full Mandi House menu, Sandringham, Auckland.">
+  <Nav solid />
+  <main class="pt-20">
+    <!-- header -->
+    <header class="px-6 md:px-12 pt-16 md:pt-24 pb-12 md:pb-16">
+      <div class="mx-auto max-w-[110rem]">
+        <p class="kicker mb-6" data-reveal>[ The Menu ]</p>
+        <h1 class="font-display font-light text-cream text-6xl md:text-8xl xl:text-9xl leading-[0.9]" data-reveal>
+          Generous by<br /><span class="italic text-saffron">design.</span>
+        </h1>
+        <p class="body-lg mt-8 max-w-xl" data-reveal>
+          Generous portions, bold aromatic spice, and a fire that never hurries.
+          Dine in or take away. Ask us about the weekend specials.
+        </p>
+      </div>
+    </header>
+
+    <!-- two-column: left category nav + right menu -->
+    <div class="px-6 md:px-12 pb-32">
+      <div class="mx-auto max-w-[110rem] grid md:grid-cols-12 gap-10 md:gap-16">
+        <!-- LEFT: category nav -->
+        <aside class="md:col-span-3">
+          <nav id="menu-nav" class="md:sticky md:top-28 flex md:flex-col gap-x-6 gap-y-3 flex-wrap pb-6 md:pb-0 border-b border-brass/15 md:border-0 mb-6 md:mb-0">
+            <p class="hidden md:block kicker mb-3">[ Browse ]</p>
+            {
+              sections.map((s, i) => (
+                <a
+                  href={`#${s.id}`}
+                  data-menu-link={s.id}
+                  class="menu-link group flex items-center gap-3 text-sm font-mono uppercase tracking-wider text-cream/45 hover:text-cream transition-colors duration-200 py-1"
+                >
+                  <span class="hidden md:block w-5 h-px bg-brass/40 transition-all duration-200 group-[.is-active]:w-8 group-[.is-active]:bg-saffron"></span>
+                  <span class="tabular-nums opacity-50 text-xs">{String(i + 1).padStart(2, "0")}</span>
+                  {s.title}
+                </a>
+              ))
+            }
+          </nav>
+        </aside>
+
+        <!-- RIGHT: menu sections -->
+        <div class="md:col-span-9 flex flex-col gap-20 md:gap-28">
+          {
+            sections.map((s) => (
+              <section id={s.id} class="scroll-mt-28" data-menu-section={s.id}>
+                <div class="border-b border-brass/15 pb-5 mb-8" data-reveal>
+                  <div class="flex items-baseline justify-between gap-4">
+                    <h2 class="font-display font-light text-cream text-4xl md:text-5xl">{s.title}</h2>
+                    {s.note && <p class="kicker text-right shrink-0">{s.note}</p>}
+                  </div>
+                  {s.desc && <p class="text-fog text-sm mt-4 max-w-2xl leading-relaxed">{s.desc}</p>}
+                </div>
+                <div class="flex flex-col">
+                  {s.items.map(([name, desc, price]) => (
+                    <div class="flex items-baseline gap-4 py-5 border-b border-brass/10" data-reveal>
+                      <div class="flex-1">
+                        <h3 class="text-cream text-lg md:text-xl">{name}</h3>
+                        {desc && <p class="text-fog text-sm mt-1">{desc}</p>}
+                      </div>
+                      <span class="font-mono text-saffron text-sm whitespace-nowrap">{price}</span>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <section class="bg-coal px-6 md:px-12 py-28 text-center">
+      <p class="kicker mb-6" data-reveal>[ Hungry yet? ]</p>
+      <h2 class="font-display font-light text-cream text-5xl md:text-7xl mb-10" data-reveal>Come in tonight.</h2>
+      <a href="/#visit" class="inline-block text-xs font-mono uppercase tracking-widest px-9 py-4 bg-saffron text-ink rounded-full hover:bg-cream transition-colors duration-300" data-reveal>
+        Find us
+      </a>
+    </section>
+  </main>
+  <Footer />
+
+  <script>
+    // Scrollspy — highlight the category whose section is in view.
+    function initMenuSpy() {
+      const links = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>("[data-menu-link]")
+      );
+      const sections = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-menu-section]")
+      );
+      if (!links.length || !sections.length) return;
+
+      const byId = new Map(links.map((l) => [l.dataset.menuLink, l]));
+
+      function setActive(id: string | undefined) {
+        links.forEach((l) => l.classList.remove("is-active", "text-cream"));
+        if (id && byId.has(id)) {
+          byId.get(id)!.classList.add("is-active", "text-cream");
+        }
+      }
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+          if (visible[0]) {
+            setActive((visible[0].target as HTMLElement).dataset.menuSection);
+          }
+        },
+        { rootMargin: "-30% 0px -60% 0px", threshold: 0 }
+      );
+      sections.forEach((s) => io.observe(s));
+      setActive(sections[0].dataset.menuSection);
+    }
+    document.addEventListener("astro:page-load", initMenuSpy);
+  </script>
+</Base>

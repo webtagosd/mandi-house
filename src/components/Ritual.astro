@@ -1,0 +1,69 @@
+---
+// The mandi ritual, told in three alternating text + image rows.
+const beats = [
+  {
+    n: "01",
+    title: "Marinated overnight",
+    desc: "Lamb and chicken rest in a blend of warm spice: cardamom, clove, black lime, until the flavour runs deep.",
+  },
+  {
+    n: "02",
+    title: "Smoked low and slow",
+    desc: "Cooked over charcoal until the meat gives way at a touch and the smoke settles into the rice beneath.",
+  },
+  {
+    n: "03",
+    title: "Served to share",
+    desc: "One platter, set in the middle of the table. Eaten with the hands. The way it's meant to be.",
+  },
+];
+---
+
+<section class="relative z-10 bg-espresso overflow-hidden">
+  <!-- faint ember wash -->
+  <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(ellipse at 80% 120%, rgba(168,51,26,0.22), transparent 55%);"></div>
+
+  <div class="relative mx-auto max-w-[110rem] px-6 md:px-12 py-28 md:py-40">
+    <!-- header -->
+    <div class="max-w-3xl mb-16 md:mb-24">
+      <p class="kicker mb-6" data-reveal>[ 02 · The Ritual ]</p>
+      <h2 class="font-display font-light text-cream text-5xl md:text-7xl leading-[0.95]" data-reveal>
+        Mandi isn't cooked fast<span class="text-saffron">.</span>
+      </h2>
+      <p class="body-lg mt-8 max-w-xl" data-reveal>
+        It's a Yemeni way of cooking that takes its time. We honour it the old
+        way, then bring it to a Sandringham night.
+      </p>
+    </div>
+
+    <!-- alternating beats -->
+    <div class="flex flex-col gap-14 md:gap-16">
+      {
+        beats.map((b, i) => (
+          <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+            <div class:list={["md:text-center", i % 2 === 1 ? "md:order-2" : ""]} data-reveal>
+              <span class="font-mono text-saffron text-sm tracking-widest">{b.n}</span>
+              <h3 class="font-display font-light text-cream text-3xl md:text-4xl mt-3 mb-4">{b.title}</h3>
+              <p class="text-fog leading-relaxed max-w-md md:mx-auto">{b.desc}</p>
+            </div>
+            <div
+              class:list={[
+                "relative aspect-[16/10] w-full max-w-[520px] mx-auto rounded-2xl overflow-hidden border border-brass/15 bg-ink/40",
+                i % 2 === 1 ? "md:order-1" : "",
+              ]}
+              data-reveal
+            >
+              <span class="absolute inset-0 flex items-center justify-center text-brass/25">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="w-10 h-10" aria-hidden="true">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <path d="M21 15l-5-5L5 21" />
+                </svg>
+              </span>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
