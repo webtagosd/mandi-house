@@ -160,5 +160,6 @@
         { "key": "seo.ogImage", "type": "url", "label": "OG image URL", "maxLength": 300 }
       ]
     }
-  ]
+  ],
+  "version": 1
 }
