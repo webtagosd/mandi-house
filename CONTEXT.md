@@ -75,4 +75,9 @@ Swap for a keyed Google/Mapbox static or embed map when an API key is available.
 
 ## Notes
 - Copy follows Deep's "no em dashes" rule (commas / colons / periods / `·` only).
-- Not deployed. When pitching externally, deploy to a non-business-branded URL first.
+- **Deployed (2026-06-21).** GitHub: `webtagmarketing/mandi-house` (private).
+  Vercel project: `webtag/mandi-house`. Public URL: https://mandi-house-peach.vercel.app
+  (the `mandi-house-webtag.vercel.app` alias is behind the team's Vercel auth — use the
+  peach URL for the dashboard / public). Deployed via `vercel --prod` CLI; GitHub auto-deploy
+  not connected yet (connect the repo in the Vercel dashboard for push-to-deploy).
+- Add the public URL to the WebTag Dashboard as an imported_premium site.

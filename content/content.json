@@ -1,0 +1,169 @@
+{
+  "business": {
+    "name": "Mandi House",
+    "tagline": "Yemeni mandi, charcoal grills, karahi and slow broths. Sandringham, Auckland.",
+    "phone": {
+      "display": "09 845 1144",
+      "tel": "+6498451144"
+    },
+    "email": "",
+    "address": {
+      "line1": "573 Sandringham Road",
+      "line2": "Sandringham, Auckland 1025"
+    },
+    "orderUrl": "https://www.ordermeal.co.nz/mandi-house/",
+    "mapUrl": "https://www.google.com/maps/search/?api=1&query=Mandi+House+573+Sandringham+Road+Auckland",
+    "social": {
+      "instagram": "",
+      "facebook": ""
+    }
+  },
+  "hero": {
+    "headline": {
+      "line1": "Mandi",
+      "line2": "House."
+    },
+    "video": "/videos/hero.mp4",
+    "poster": "/videos/hero-poster.jpg",
+    "ctaPrimary": {
+      "label": "View the menu",
+      "href": "/menu"
+    },
+    "ctaSecondary": {
+      "label": "Book a table",
+      "href": "/#visit"
+    }
+  },
+  "story": {
+    "kicker": "Our Story",
+    "headline": "Mandi is a Yemeni word for a way of cooking. Meat and rice, slow-smoked together until they belong to each other.",
+    "body1": "Located at 573 Sandringham Road, Sandringham, Auckland, Mandi House is a beloved destination for authentic Middle Eastern and South Asian cuisine. Known for its signature Mandi dishes, a traditional Yemeni-style rice and meat delicacy, the restaurant has carved a name for itself among food lovers in Auckland's bustling Sandringham food district.",
+    "body2": "Mandi House offers a casual yet inviting atmosphere, perfect for both dine-in and takeaway. The menu features a wide variety of dishes, including chicken and lamb mandi, biryanis, kebabs, curries, fried rice, and wraps. Their generous portions, affordable pricing, and bold, aromatic spices make it a favourite for group meals and family feasts. Prices start from around $17.99 for a single serve, with family platters also available.",
+    "body3": "Their standout offering, the whole lamb leg mandi, is especially popular for special occasions and weekend feasts. Vegetarians aren't left out either, with options like paneer tikka, vegetarian wraps, and rice bowls. In addition to the regular menu, Mandi House frequently offers weekend specials such as zafrani chicken biryani and lamb paya, which attract a loyal following. The friendly service and quick turnaround time only add to the appeal.",
+    "image": "",
+    "believe": "Generous portions. Honest pricing. Bold, aromatic spice.",
+    "cook": "Charcoal, time, and overnight marinades. Nothing rushed, nothing cut short.",
+    "who": "Families, friends and late-night tables who came to share."
+  },
+  "ritual": {
+    "kicker": "02 · The Ritual",
+    "headline": "Mandi isn't cooked fast.",
+    "intro": "It's a Yemeni way of cooking that takes its time. We honour it the old way, then bring it to a Sandringham night.",
+    "steps": [
+      {
+        "n": "01",
+        "title": "Marinated overnight",
+        "desc": "Lamb and chicken rest in a blend of warm spice: cardamom, clove, black lime, until the flavour runs deep.",
+        "image": ""
+      },
+      {
+        "n": "02",
+        "title": "Smoked low and slow",
+        "desc": "Cooked over charcoal until the meat gives way at a touch and the smoke settles into the rice beneath.",
+        "image": ""
+      },
+      {
+        "n": "03",
+        "title": "Served to share",
+        "desc": "One platter, set in the middle of the table. Eaten with the hands. The way it's meant to be.",
+        "image": ""
+      }
+    ]
+  },
+  "menu": {
+    "kicker": "The Menu",
+    "intro": "Generous portions, bold aromatic spice, and a fire that never hurries. Dine in or take away. Ask us about the weekend specials.",
+    "sections": [
+      { "id": "starters", "title": "Starters", "note": "To begin", "desc": "" },
+      { "id": "mandi", "title": "Mandi", "note": "Aromatic spiced rice", "desc": "Traditional dish of aromatic rice steamed with a rich, spiced lamb soup." },
+      { "id": "grill", "title": "Grill Kebab Platters", "note": "Off the charcoal", "desc": "Flame-grilled platters seasoned with authentic Middle Eastern spices, prepared with fresh, hand-selected meat." },
+      { "id": "steak", "title": "Steak Platters", "note": "Plated & grilled", "desc": "" },
+      { "id": "karahi", "title": "Skewers & Karahi", "note": "Shenwari sauce", "desc": "Health-focused cuts with light spices, tailored to all dietary needs. Hand-selected meat, simple and delicious." },
+      { "id": "extras", "title": "Rice & Extras", "note": "Build your plate", "desc": "" },
+      { "id": "bread", "title": "Bread", "note": "From the oven", "desc": "" },
+      { "id": "desserts", "title": "Desserts", "note": "Something sweet", "desc": "" },
+      { "id": "drinks", "title": "Drinks", "note": "Handcrafted", "desc": "" }
+    ],
+    "items": [
+      { "section": "Starters", "name": "Chicken Salad", "desc": "Sliced chicken served with fresh salad and fries.", "price": "$16.99" },
+      { "section": "Starters", "name": "Lamb Salad", "desc": "Sliced lamb with salad and fries.", "price": "$17.99" },
+      { "section": "Starters", "name": "Chicken on Cheesy Fries", "desc": "Sliced chicken over cheesy fries.", "price": "$17.99" },
+      { "section": "Starters", "name": "Chicken on Fries", "desc": "Sliced chicken over fries.", "price": "$16.99" },
+      { "section": "Starters", "name": "Lamb on Cheesy Fries", "desc": "Sliced lamb over cheesy fries.", "price": "$18.99" },
+      { "section": "Starters", "name": "Lamb on Fries", "desc": "Sliced lamb over fries.", "price": "$17.99" },
+      { "section": "Starters", "name": "Mutton Shorba", "desc": "Traditional slow-cooked mutton soup with spices.", "price": "$12.99" },
+      { "section": "Starters", "name": "Harissa", "desc": "A classic Middle Eastern Ramadan dish of wheat and slow-cooked meat, known for its smooth texture.", "price": "$20.00" },
+      { "section": "Starters", "name": "Green Salad", "desc": "", "price": "$12.99" },
+      { "section": "Starters", "name": "Fries", "desc": "", "price": "$12.99" },
+      { "section": "Starters", "name": "Cheesy Fries", "desc": "", "price": "$12.99" },
+      { "section": "Mandi", "name": "Single Chicken Mandi", "desc": "One Maryland chicken piece over mandi rice. Serves 1.", "price": "$22.99" },
+      { "section": "Mandi", "name": "Single Lamb Mandi", "desc": "Pieces of lamb on the bone over mandi rice. Serves 1.", "price": "$24.99" },
+      { "section": "Mandi", "name": "Single Fish Mandi", "desc": "Boneless basa fish infused with authentic spices, over mandi rice. Serves 1.", "price": "$27.99" },
+      { "section": "Mandi", "name": "Family Pack Chicken Mandi", "desc": "Four Maryland chicken pieces over mandi rice. Serves 3 to 4.", "price": "$65.99" },
+      { "section": "Mandi", "name": "Family Pack Lamb Mandi", "desc": "Pieces of lamb on the bone over mandi rice. Serves 3 to 4.", "price": "$69.99" },
+      { "section": "Mandi", "name": "Family Pack Mixed Mandi", "desc": "Maryland chicken and lamb pieces over mandi rice. Serves 3 to 4.", "price": "$74.99" },
+      { "section": "Mandi", "name": "Family Pack Fish Mandi", "desc": "Boneless basa fish infused with authentic spices, over mandi rice. Serves 3 to 4.", "price": "$80.00" },
+      { "section": "Grill Kebab Platters", "name": "Mixed Grill", "desc": "One lamb sheesh, one tikka chicken and one grill chicken skewer over mandi rice, with bread, salad and fries. Serves 1.", "price": "$25.99" },
+      { "section": "Grill Kebab Platters", "name": "3 Lamb Sheesh Kebab", "desc": "Served over mandi rice with bread, salad and fries.", "price": "$24.99" },
+      { "section": "Grill Kebab Platters", "name": "3 Tikka Chicken Skewers", "desc": "Served over mandi rice with bread, salad and fries.", "price": "$23.99" },
+      { "section": "Grill Kebab Platters", "name": "3 Chicken Grill Skewers", "desc": "Served over mandi rice with bread, salad and fries.", "price": "$23.99" },
+      { "section": "Grill Kebab Platters", "name": "Family Pack Mixed Grill", "desc": "Three lamb sheesh, three tikka chicken and three grill chicken skewers, with two bread, chips, tomato chutney, mandi rice and salad. Serves 3 to 4.", "price": "$80.00" },
+      { "section": "Grill Kebab Platters", "name": "Jumbo Family Pack Mixed Mandi + Grill", "desc": "Maryland chicken and lamb pieces over mandi rice, plus three lamb sheesh, three tikka chicken and three grill chicken skewers, with four bread, chips, tomato chutney, rice and salad. Serves 8 to 10.", "price": "$150.00" },
+      { "section": "Grill Kebab Platters", "name": "Jumbo Max Family Pack Mixed Mandi + Grill", "desc": "Everything in the Jumbo, plus Arabian karahi chicken. Serves 8 to 10.", "price": "$175.00" },
+      { "section": "Steak Platters", "name": "Grilled Chicken Steak", "desc": "Chicken breast with rice, salad, bread, tzatziki sauce and chips.", "price": "$25.99" },
+      { "section": "Steak Platters", "name": "Grilled Lamb Shoulder", "desc": "Sliced lamb shoulder with rice, salad, bread, tzatziki sauce and chips.", "price": "$26.99" },
+      { "section": "Skewers & Karahi", "name": "2 Skewers with Shenwari Sauce", "desc": "Served with rice and bread.", "price": "$29.99" },
+      { "section": "Skewers & Karahi", "name": "2 Skewers with Butter Sauce", "desc": "Served with rice and bread.", "price": "$29.99" },
+      { "section": "Skewers & Karahi", "name": "Arabian Karahi Chicken", "desc": "Traditional karahi with bold spices, fresh herbs and authentic Arabian flavours. Served with rice and bread.", "price": "$30.00" },
+      { "section": "Skewers & Karahi", "name": "Arabian Karahi Goat", "desc": "Goat on the bone in bold spices and Arabian flavours. Served with rice and bread.", "price": "$34.00" },
+      { "section": "Skewers & Karahi", "name": "Arabian Butter Paneer", "desc": "Cottage cheese and mixed vegetables in butter sauce. Vegetarian. Served with rice and bread.", "price": "$28.00" },
+      { "section": "Rice & Extras", "name": "Mandi Rice", "desc": "", "price": "$8.99" },
+      { "section": "Rice & Extras", "name": "Maryland Chicken Piece", "desc": "Single piece.", "price": "$11.99" },
+      { "section": "Rice & Extras", "name": "Lamb Pieces", "desc": "", "price": "$13.99" },
+      { "section": "Rice & Extras", "name": "Lamb Sheesh Skewer", "desc": "", "price": "$9.99" },
+      { "section": "Rice & Extras", "name": "Tikka Chicken Skewer", "desc": "", "price": "$9.99" },
+      { "section": "Rice & Extras", "name": "Grill Chicken Skewer", "desc": "", "price": "$9.99" },
+      { "section": "Bread", "name": "Chicken Calzone Bread", "desc": "Small, filled with chicken and cheese.", "price": "$7.99" },
+      { "section": "Bread", "name": "Lamb Calzone Bread", "desc": "Small, filled with lamb and cheese.", "price": "$8.99" },
+      { "section": "Bread", "name": "Small Round Bread", "desc": "With butter.", "price": "$3.00" },
+      { "section": "Bread", "name": "Garlic Bread", "desc": "", "price": "$3.50" },
+      { "section": "Bread", "name": "Bread Basket", "desc": "One butter, one garlic, one lamb mince, one chicken mince.", "price": "$18.99" },
+      { "section": "Desserts", "name": "Nutella Baklawa", "desc": "Crispy pastry layered with Nutella and nuts.", "price": "$7.99" },
+      { "section": "Desserts", "name": "Pistachio Baklawa", "desc": "Traditional pastry filled with pistachios.", "price": "$7.99" },
+      { "section": "Desserts", "name": "Mandi House Special Dessert", "desc": "Our house specialty.", "price": "$7.00" },
+      { "section": "Drinks", "name": "Watermelon Cooler", "desc": "Monin watermelon syrup, mint, lime and soda water.", "price": "$9.99" },
+      { "section": "Drinks", "name": "Pomegranate Fizz", "desc": "Monin pomegranate syrup, apple and lemon-lime soda.", "price": "$9.99" },
+      { "section": "Drinks", "name": "Berries Blaster", "desc": "Monin blueberry, basil and lemon-lime soda.", "price": "$9.99" },
+      { "section": "Drinks", "name": "Tropical Fizz", "desc": "Monin lychee, pineapple, lime and soda water.", "price": "$9.99" },
+      { "section": "Drinks", "name": "Green Tea Pot", "desc": "A pot of green tea.", "price": "$12.00" }
+    ]
+  },
+  "reviews": {
+    "eyebrow": "04 · Word of Mouth",
+    "list": [
+      { "quote": "The lamb mandi falls apart and the rice is unreal. Biggest portions in Sandringham, we always over-order.", "name": "[PLACEHOLDER_REVIEW_1]", "meta": "Google review" },
+      { "quote": "Found my new late-night spot. Generous, properly spiced, and the bread comes out hot.", "name": "[PLACEHOLDER_REVIEW_2]", "meta": "Google review" },
+      { "quote": "Ordered the whole lamb leg for a birthday. Whole table went quiet. That good.", "name": "[PLACEHOLDER_REVIEW_3]", "meta": "Google review" }
+    ]
+  },
+  "visit": {
+    "kicker": "Visit",
+    "headline": "Find us on Sandringham Road.",
+    "hours": {
+      "weekday": "5pm – 11pm",
+      "friday": "5pm – 12am",
+      "weekend": "12pm – 12am"
+    },
+    "note": "Walk-ins welcome. For large platters and the whole lamb leg, please call ahead."
+  },
+  "footer": {
+    "signoff": "Come hungry.",
+    "credit": "Website created by webtag.co.nz",
+    "creditUrl": "https://webtag.co.nz"
+  },
+  "seo": {
+    "title": "Mandi House · Yemeni Fire-Feast, Sandringham",
+    "description": "Slow-smoked Yemeni mandi, saffron rice and a platter built to share. Sandringham, Auckland. Open late, seven nights.",
+    "ogImage": ""
+  }
+}

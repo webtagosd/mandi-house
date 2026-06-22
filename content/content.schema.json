@@ -1,0 +1,164 @@
+{
+  "groups": [
+    {
+      "id": "business",
+      "label": "Business details",
+      "description": "Core restaurant info — name, contact, address, ordering link. Used across the whole site.",
+      "fields": [
+        { "key": "business.name", "type": "text", "label": "Business name", "required": true, "maxLength": 80 },
+        { "key": "business.tagline", "type": "text", "label": "Tagline", "maxLength": 160, "help": "Short description used in meta tags." },
+        { "key": "business.phone.display", "type": "text", "label": "Phone (display)", "maxLength": 20 },
+        { "key": "business.phone.tel", "type": "text", "label": "Phone (tel link)", "maxLength": 20, "help": "Digits with country code, e.g. \"+6498451144\"." },
+        { "key": "business.email", "type": "email", "label": "Email" },
+        { "key": "business.address.line1", "type": "text", "label": "Address line 1", "maxLength": 80 },
+        { "key": "business.address.line2", "type": "text", "label": "Address line 2", "maxLength": 80 },
+        { "key": "business.orderUrl", "type": "url", "label": "Online order URL", "help": "Used by the Order Now button." },
+        { "key": "business.mapUrl", "type": "url", "label": "Google Maps URL" },
+        { "key": "business.social.instagram", "type": "url", "label": "Instagram URL" },
+        { "key": "business.social.facebook", "type": "url", "label": "Facebook URL" }
+      ]
+    },
+    {
+      "id": "hero",
+      "label": "Hero",
+      "description": "Full-bleed hero with the background video and the wordmark headline.",
+      "fields": [
+        { "key": "hero.headline.line1", "type": "text", "label": "Headline line 1", "required": true, "maxLength": 40 },
+        { "key": "hero.headline.line2", "type": "text", "label": "Headline line 2", "maxLength": 40 },
+        { "key": "hero.video", "type": "text", "label": "Background video path", "maxLength": 200, "help": "Path to the looping hero video, e.g. /videos/hero.mp4" },
+        { "key": "hero.poster", "type": "image", "label": "Video poster image", "minWidth": 1600, "aspectRatio": "16:9", "help": "Still shown before the video loads." },
+        { "key": "hero.ctaPrimary.label", "type": "text", "label": "Primary button label", "maxLength": 30 },
+        { "key": "hero.ctaPrimary.href", "type": "text", "label": "Primary button link", "maxLength": 120 },
+        { "key": "hero.ctaSecondary.label", "type": "text", "label": "Secondary button label", "maxLength": 30 },
+        { "key": "hero.ctaSecondary.href", "type": "text", "label": "Secondary button link", "maxLength": 120 }
+      ]
+    },
+    {
+      "id": "story",
+      "label": "Our Story",
+      "description": "The Our Story section — heading, body paragraphs, the image, and the three short notes.",
+      "fields": [
+        { "key": "story.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
+        { "key": "story.headline", "type": "longtext", "label": "Headline", "maxLength": 240 },
+        { "key": "story.body1", "type": "longtext", "label": "Paragraph 1", "maxLength": 800 },
+        { "key": "story.body2", "type": "longtext", "label": "Paragraph 2", "maxLength": 800 },
+        { "key": "story.body3", "type": "longtext", "label": "Paragraph 3", "maxLength": 800 },
+        { "key": "story.image", "type": "image", "label": "Story image", "minWidth": 1200, "aspectRatio": "4:3" },
+        { "key": "story.believe", "type": "longtext", "label": "What we believe", "maxLength": 200 },
+        { "key": "story.cook", "type": "longtext", "label": "How we cook", "maxLength": 200 },
+        { "key": "story.who", "type": "longtext", "label": "Who it's for", "maxLength": 200 }
+      ]
+    },
+    {
+      "id": "ritual",
+      "label": "The Ritual",
+      "description": "The three-step ritual section. Each step alternates text and image.",
+      "fields": [
+        { "key": "ritual.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
+        { "key": "ritual.headline", "type": "text", "label": "Headline", "maxLength": 80 },
+        { "key": "ritual.intro", "type": "longtext", "label": "Intro", "maxLength": 300 },
+        {
+          "key": "ritual.steps",
+          "type": "list",
+          "label": "Steps",
+          "minItems": 1,
+          "maxItems": 6,
+          "itemSchema": [
+            { "key": "n", "type": "text", "label": "Number", "maxLength": 4 },
+            { "key": "title", "type": "text", "label": "Title", "required": true, "maxLength": 60 },
+            { "key": "desc", "type": "longtext", "label": "Description", "maxLength": 400 },
+            { "key": "image", "type": "image", "label": "Image", "minWidth": 1000, "aspectRatio": "16:10" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "menu",
+      "label": "Menu",
+      "description": "The full menu. Sections set the category headers; items are the individual dishes (the 'section' on each item matches a section title).",
+      "fields": [
+        { "key": "menu.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
+        { "key": "menu.intro", "type": "longtext", "label": "Intro", "maxLength": 300 },
+        {
+          "key": "menu.sections",
+          "type": "list",
+          "label": "Menu sections",
+          "minItems": 1,
+          "maxItems": 20,
+          "itemSchema": [
+            { "key": "id", "type": "text", "label": "Slug", "required": true, "maxLength": 40 },
+            { "key": "title", "type": "text", "label": "Title", "required": true, "maxLength": 60 },
+            { "key": "note", "type": "text", "label": "Tagline", "maxLength": 60 },
+            { "key": "desc", "type": "longtext", "label": "Description", "maxLength": 300 }
+          ]
+        },
+        {
+          "key": "menu.items",
+          "type": "list",
+          "label": "Menu items",
+          "minItems": 1,
+          "maxItems": 200,
+          "itemSchema": [
+            { "key": "section", "type": "text", "label": "Section title", "required": true, "maxLength": 60, "help": "Must match a section title above." },
+            { "key": "name", "type": "text", "label": "Dish name", "required": true, "maxLength": 80 },
+            { "key": "desc", "type": "longtext", "label": "Description", "maxLength": 300 },
+            { "key": "price", "type": "text", "label": "Price", "maxLength": 12 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reviews",
+      "label": "Reviews",
+      "description": "Customer reviews. Use real Google reviews only.",
+      "fields": [
+        { "key": "reviews.eyebrow", "type": "text", "label": "Eyebrow", "maxLength": 40 },
+        {
+          "key": "reviews.list",
+          "type": "list",
+          "label": "Reviews",
+          "minItems": 0,
+          "maxItems": 30,
+          "itemSchema": [
+            { "key": "quote", "type": "longtext", "label": "Quote", "required": true, "maxLength": 400 },
+            { "key": "name", "type": "text", "label": "Reviewer name", "maxLength": 80 },
+            { "key": "meta", "type": "text", "label": "Source", "maxLength": 40 }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "visit",
+      "label": "Visit",
+      "description": "The Visit section — address, hours and contact.",
+      "fields": [
+        { "key": "visit.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
+        { "key": "visit.headline", "type": "text", "label": "Headline", "maxLength": 80 },
+        { "key": "visit.hours.weekday", "type": "text", "label": "Hours — Mon to Thu", "maxLength": 40 },
+        { "key": "visit.hours.friday", "type": "text", "label": "Hours — Friday", "maxLength": 40 },
+        { "key": "visit.hours.weekend", "type": "text", "label": "Hours — Sat to Sun", "maxLength": 40 },
+        { "key": "visit.note", "type": "longtext", "label": "Reservations note", "maxLength": 200 }
+      ]
+    },
+    {
+      "id": "footer",
+      "label": "Footer",
+      "description": "Footer signoff and credit.",
+      "fields": [
+        { "key": "footer.signoff", "type": "text", "label": "Signoff", "maxLength": 40 },
+        { "key": "footer.credit", "type": "text", "label": "Credit line", "maxLength": 80 },
+        { "key": "footer.creditUrl", "type": "url", "label": "Credit link" }
+      ]
+    },
+    {
+      "id": "seo",
+      "label": "SEO",
+      "description": "Default page title and meta description.",
+      "fields": [
+        { "key": "seo.title", "type": "text", "label": "Default title", "maxLength": 120 },
+        { "key": "seo.description", "type": "longtext", "label": "Meta description", "maxLength": 300 },
+        { "key": "seo.ogImage", "type": "url", "label": "OG image URL", "maxLength": 300 }
+      ]
+    }
+  ]
+}
