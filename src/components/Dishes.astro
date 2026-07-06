@@ -10,6 +10,7 @@ const dishes = [
     price: "$19",
     span: "md:col-span-3 md:row-span-2",
     tone: "from-[#3a2510] to-[#1a1109]",
+    img: "/images/dishes/chicken-mandi.webp",
     big: true,
   },
   {
@@ -19,6 +20,7 @@ const dishes = [
     price: "$24",
     span: "md:col-span-3",
     tone: "from-[#3a1c12] to-[#1a0f09]",
+    img: "/images/dishes/lamb-mandi.webp",
   },
   {
     n: "03",
@@ -27,14 +29,16 @@ const dishes = [
     price: "$26",
     span: "md:col-span-3",
     tone: "from-[#2c1e0e] to-[#160e07]",
+    img: "/images/dishes/mixed-grill.webp",
   },
   {
     n: "04",
-    name: "Zafrani Biryani",
-    desc: "Weekend special. Layered saffron biryani, deep with spice.",
-    price: "$22",
+    name: "Chicken Steak",
+    desc: "Grilled chicken steak with fries, garden salad and fresh-baked bread.",
+    price: "$20",
     span: "md:col-span-2",
     tone: "from-[#34240f] to-[#170f08]",
+    img: "/images/dishes/chicken-steak.webp",
   },
   {
     n: "05",
@@ -43,14 +47,16 @@ const dishes = [
     price: "$18",
     span: "md:col-span-2",
     tone: "from-[#331a10] to-[#150d08]",
+    img: "/images/dishes/lamb-paya.webp",
   },
   {
     n: "06",
-    name: "Whole Lamb Leg",
-    desc: "The centrepiece. Built for the table. Order ahead.",
-    price: "POA",
+    name: "Chicken Salad",
+    desc: "Char-grilled chicken over fresh garden leaves, with fries and a squeeze of lemon.",
+    price: "$17",
     span: "md:col-span-2",
     tone: "from-[#3d2912] to-[#1a1009]",
+    img: "/images/dishes/chicken-salad.webp",
   },
 ];
 ---
@@ -79,10 +85,19 @@ const dishes = [
             ]}
             data-reveal
           >
-            <div
-              class:list={["dish-img absolute inset-0 bg-gradient-to-br opacity-90 transition-transform duration-700 group-hover:scale-105", d.tone]}
-            />
-            <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(14,10,6,0.85), rgba(14,10,6,0.1) 60%);" />
+            {d.img ? (
+              <img
+                src={d.img}
+                alt={d.name}
+                loading="lazy"
+                class="dish-img absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+            ) : (
+              <div
+                class:list={["dish-img absolute inset-0 bg-gradient-to-br opacity-90 transition-transform duration-700 group-hover:scale-105", d.tone]}
+              />
+            )}
+            <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(14,10,6,0.92), rgba(14,10,6,0.15) 65%);" />
             <div class="relative z-10">
               <span class="font-mono text-xs text-saffron/80 tracking-widest block mb-3">{d.n}</span>
               <div class="flex items-baseline justify-between gap-4 mb-2">

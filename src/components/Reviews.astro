@@ -1,24 +1,65 @@
 ---
-// Magazine-style review spread.
-// PLACEHOLDER QUOTES — replace with real Google reviews before pitch/launch.
-// (Skill rule: real reviews only. These are stand-ins to show the layout.)
+// Magazine-style review spread that auto-cycles through real Google reviews.
+// Quotes are verbatim (lightly trimmed to the key sentences) with real
+// reviewer names, pulled from Mandi House's Google listing (4.6★).
 const reviews = [
   {
     quote:
-      "The lamb mandi falls apart and the rice is unreal. Biggest portions in Sandringham, we always over-order.",
-    name: "[PLACEHOLDER_REVIEW_1]",
+      "We tried the Mixed Platter and it was absolutely delicious. The meat was tender, flavorful, and perfectly cooked, with generous portions that were great for sharing.",
+    name: "Sajna Ali Sadique",
     meta: "Google review",
   },
   {
     quote:
-      "Found my new late-night spot. Generous, properly spiced, and the bread comes out hot.",
-    name: "[PLACEHOLDER_REVIEW_2]",
+      "The food was brilliantly divine. Be sure to subject your taste buds to a burst of flavours at every morsel.",
+    name: "Swetha Chepur",
     meta: "Google review",
   },
   {
     quote:
-      "Ordered the whole lamb leg for a birthday. Whole table went quiet. That good.",
-    name: "[PLACEHOLDER_REVIEW_3]",
+      "The ambiance is really nice, food 10/10. Came from the city to just have mandi rice here. One of the best places in Auckland.",
+    name: "Krisha Bhujel",
+    meta: "Google review",
+  },
+  {
+    quote:
+      "This spot is amazing! The platter is huge and loaded with delicious, perfectly cooked meats and sides. A must-try!",
+    name: "Hamna Noor",
+    meta: "Google review",
+  },
+  {
+    quote:
+      "It's easily the best mandi I've had in New Zealand. The rice is perfectly cooked, aromatic, and full of spices, and the meat is tender, juicy, and well-marinated.",
+    name: "Rajesh C",
+    meta: "Google review",
+  },
+  {
+    quote:
+      "Mandi House catered for a celebration at our home. Our guests loved the food and we were happy the restaurant could accommodate our Sunday lunch order.",
+    name: "Rowena D'Souza",
+    meta: "Google review",
+  },
+  {
+    quote:
+      "Amazing service by the staff and great food! We ordered the chicken tikka kebab and lamb steak platter. Definitely recommend Mandi House!",
+    name: "Ayesha Rahman",
+    meta: "Google review",
+  },
+  {
+    quote:
+      "Seriously good food. We tried their Chicken Mandi and mixed platter. Highly recommend this one.",
+    name: "Melvin Mathew Vaidian",
+    meta: "Google review",
+  },
+  {
+    quote:
+      "We had an amazing experience. The food, atmosphere, and overall service were excellent. A special thanks to Salena, who was incredibly humble, friendly and attentive.",
+    name: "Sanji Grg",
+    meta: "Google review",
+  },
+  {
+    quote: "Delicious food and very generous portions!",
+    name: "Pippi Butterworth",
     meta: "Google review",
   },
 ];
@@ -28,31 +69,112 @@ const reviews = [
   <div class="mx-auto max-w-[110rem]">
     <div class="flex items-baseline justify-between gap-6 mb-16">
       <p class="kicker" data-reveal>[ 03 · Word of Mouth ]</p>
-      <span class="font-mono text-sm text-fog" data-reveal>★★★★★</span>
+      <span class="font-mono text-sm text-fog" data-reveal>★★★★★ <span class="text-fog/70">· 4.6 on Google</span></span>
     </div>
 
-    <blockquote class="border-t border-brass/15 pt-12 mb-12" data-reveal>
-      <p class="font-display font-light text-cream text-3xl md:text-5xl xl:text-6xl leading-[1.1] max-w-5xl">
-        “{reviews[0].quote.replace(/^"|"$/g, "")}”
+    <!-- featured quote (rotates) -->
+    <blockquote id="rev-featured" class="review-fade border-t border-brass/15 pt-12 mb-12 min-h-[240px] md:min-h-[300px]" data-reveal>
+      <p id="rev-q0" class="font-display font-light text-cream text-3xl md:text-5xl xl:text-6xl leading-[1.1] max-w-5xl">
+        “{reviews[0].quote}”
       </p>
       <footer class="mt-8 font-mono text-sm tracking-widest uppercase text-saffron">
-        {reviews[0].name} <span class="text-fog">· {reviews[0].meta}</span>
+        <span id="rev-n0">{reviews[0].name}</span> <span class="text-fog">· <span id="rev-m0">{reviews[0].meta}</span></span>
       </footer>
     </blockquote>
 
     <div class="grid md:grid-cols-2 gap-8 border-t border-brass/15 pt-12">
-      {
-        reviews.slice(1).map((r) => (
-          <blockquote data-reveal>
-            <p class="font-display font-light text-cream text-xl md:text-2xl leading-snug">
-              “{r.quote}”
-            </p>
-            <footer class="mt-5 font-mono text-xs tracking-widest uppercase text-saffron">
-              {r.name} <span class="text-fog">· {r.meta}</span>
-            </footer>
-          </blockquote>
-        ))
-      }
+      <blockquote id="rev-sec1" class="review-fade min-h-[150px]" data-reveal>
+        <p id="rev-q1" class="review-clamp font-display font-light text-cream text-xl md:text-2xl leading-snug">
+          “{reviews[1].quote}”
+        </p>
+        <footer class="mt-5 font-mono text-xs tracking-widest uppercase text-saffron">
+          <span id="rev-n1">{reviews[1].name}</span> <span class="text-fog">· <span id="rev-m1">{reviews[1].meta}</span></span>
+        </footer>
+      </blockquote>
+      <blockquote id="rev-sec2" class="review-fade min-h-[150px]" data-reveal>
+        <p id="rev-q2" class="review-clamp font-display font-light text-cream text-xl md:text-2xl leading-snug">
+          “{reviews[2].quote}”
+        </p>
+        <footer class="mt-5 font-mono text-xs tracking-widest uppercase text-saffron">
+          <span id="rev-n2">{reviews[2].name}</span> <span class="text-fog">· <span id="rev-m2">{reviews[2].meta}</span></span>
+        </footer>
+      </blockquote>
     </div>
   </div>
 </section>
+
+<script type="application/json" id="reviews-data" set:html={JSON.stringify(reviews)}></script>
+
+<style>
+  .review-fade { transition: opacity 0.5s ease; }
+  .review-fade.is-fading { opacity: 0; }
+  /* keep long quotes tidy in the smaller side slots */
+  .review-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    function init() {
+      var dataEl = document.getElementById("reviews-data");
+      var featured = document.getElementById("rev-featured");
+      if (!dataEl || !featured) return;
+      var data;
+      try { data = JSON.parse(dataEl.textContent); } catch (e) { return; }
+      if (!data.length) return;
+
+      var slots = [
+        { q: document.getElementById("rev-q0"), n: document.getElementById("rev-n0"), m: document.getElementById("rev-m0"), block: document.getElementById("rev-featured") },
+        { q: document.getElementById("rev-q1"), n: document.getElementById("rev-n1"), m: document.getElementById("rev-m1"), block: document.getElementById("rev-sec1") },
+        { q: document.getElementById("rev-q2"), n: document.getElementById("rev-n2"), m: document.getElementById("rev-m2"), block: document.getElementById("rev-sec2") },
+      ];
+      var n = data.length;
+      var i = 0;
+
+      function render(k) {
+        for (var s = 0; s < slots.length; s++) {
+          var r = data[(k + s) % n];
+          slots[s].q.textContent = "“" + r.quote + "”";
+          slots[s].n.textContent = r.name;
+          slots[s].m.textContent = r.meta;
+        }
+      }
+
+      function fade(on) {
+        for (var s = 0; s < slots.length; s++) {
+          slots[s].block.classList.toggle("is-fading", on);
+        }
+      }
+
+      function tick() {
+        fade(true);
+        setTimeout(function () {
+          i = (i + 1) % n;
+          render(i);
+          fade(false);
+        }, 500);
+      }
+
+      // clear any prior timer (e.g. on astro:page-load re-init)
+      if (window.__mhReviewTimer) clearInterval(window.__mhReviewTimer);
+      render(0);
+      window.__mhReviewTimer = setInterval(tick, 6000);
+
+      // pause while the visitor is reading
+      featured.parentNode.addEventListener("mouseenter", function () {
+        if (window.__mhReviewTimer) { clearInterval(window.__mhReviewTimer); window.__mhReviewTimer = null; }
+      });
+      featured.parentNode.addEventListener("mouseleave", function () {
+        if (!window.__mhReviewTimer) window.__mhReviewTimer = setInterval(tick, 6000);
+      });
+    }
+
+    if (document.readyState !== "loading") init();
+    else document.addEventListener("DOMContentLoaded", init);
+    document.addEventListener("astro:page-load", init);
+  })();
+</script>

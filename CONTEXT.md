@@ -70,14 +70,21 @@ seamlessly on the dark nav with no box. Files: `public/images/logo.png` (used);
 original kept at `assets/logo-original.jpg` (not served).
 
 ## Map
-`/visit` uses a designed location panel (keyless Google embeds now render blank).
-Swap for a keyed Google/Mapbox static or embed map when an API key is available.
+Visit section (`VisitSection.astro`) shows a **real Leaflet map** — free CARTO `dark_all`
+tiles (no API key), warm-tinted via a CSS filter on `.leaflet-tile-pane` to match the
+charcoal + saffron palette, with a custom gold `divIcon` pin at 573 Sandringham Road
+(-36.8923349, 174.7361633). scrollWheelZoom/zoomControl off, dragging on. Leaflet loaded
+from unpkg CDN via an inline script (dynamic-injects JS, re-inits on `astro:page-load`).
+"Open in Google Maps" button overlays bottom-left. (No key needed; upgrade to Mapbox with
+a custom style later if a more branded look is wanted.)
 
 ## Notes
 - Copy follows Deep's "no em dashes" rule (commas / colons / periods / `·` only).
-- **Deployed (2026-06-21).** GitHub: `webtagmarketing/mandi-house` (private).
-  Vercel project: `webtag/mandi-house`. Public URL: https://mandi-house-peach.vercel.app
-  (the `mandi-house-webtag.vercel.app` alias is behind the team's Vercel auth — use the
-  peach URL for the dashboard / public). Deployed via `vercel --prod` CLI; GitHub auto-deploy
-  not connected yet (connect the repo in the Vercel dashboard for push-to-deploy).
-- Add the public URL to the WebTag Dashboard as an imported_premium site.
+- **Deployed (2026-06-21).** GitHub: `webtagosd/mandi-house` (PUBLIC — Vercel webtag team
+  is Hobby plan, which only connects public repos; all site repos live under the `webtagosd`
+  ORG, not webtagmarketing). Vercel project `webtag/mandi-house` (id `prj_HIDD0nqCAD3kUEDs1dzIyVSI16B2`),
+  GitHub now connected → push-to-deploy live. Public URL: https://mandi-house-peach.vercel.app
+- **Dashboard import fields:** Production URL `https://mandi-house-peach.vercel.app`,
+  Repo `https://github.com/webtagosd/mandi-house`, Vercel project id `prj_HIDD0nqCAD3kUEDs1dzIyVSI16B2`,
+  Deploy hook `https://api.vercel.com/v1/integrations/deploy/prj_HIDD0nqCAD3kUEDs1dzIyVSI16B2/296EcSf7qp`,
+  upload `content/content.json` + `content/content.schema.json`.
