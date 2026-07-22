@@ -80,11 +80,14 @@ a custom style later if a more branded look is wanted.)
 
 ## Notes
 - Copy follows Deep's "no em dashes" rule (commas / colons / periods / `·` only).
-- **Deployed (2026-06-21).** GitHub: `webtagosd/mandi-house` (PUBLIC — Vercel webtag team
-  is Hobby plan, which only connects public repos; all site repos live under the `webtagosd`
-  ORG, not webtagmarketing). Vercel project `webtag/mandi-house` (id `prj_HIDD0nqCAD3kUEDs1dzIyVSI16B2`),
-  GitHub now connected → push-to-deploy live. Public URL: https://mandi-house-peach.vercel.app
-- **Dashboard import fields:** Production URL `https://mandi-house-peach.vercel.app`,
-  Repo `https://github.com/webtagosd/mandi-house`, Vercel project id `prj_HIDD0nqCAD3kUEDs1dzIyVSI16B2`,
-  Deploy hook `https://api.vercel.com/v1/integrations/deploy/prj_HIDD0nqCAD3kUEDs1dzIyVSI16B2/296EcSf7qp`,
+- **Deployed.** GitHub: `webtagosd/mandi-house` (PUBLIC). Vercel project on the **`webtagosd`
+  team** (`webtagosd/mandi-house`, id `prj_ohmVbegOusEdKeWl38dyGeDPE3Mu`) — moved here 2026-07-06
+  from the old `webtag` team, which does NOT own the `webtag.co.nz` domain routing (that lives on
+  `webtagosd`, which is why the custom domain only verified once the project was on this team).
+  GitHub connected → push-to-deploy live. Live URL: https://mandi-house.webtag.co.nz
+  (old `webtag`-team project `prj_HIDD0nqCAD3kUEDs1dzIyVSI16B2` / `mandi-house-peach.vercel.app`
+  is now redundant — delete it to avoid double-deploys).
+- **Dashboard import fields:** Production URL `https://mandi-house.webtag.co.nz`,
+  Repo `https://github.com/webtagosd/mandi-house`, Vercel project id `prj_ohmVbegOusEdKeWl38dyGeDPE3Mu`,
+  Deploy hook `https://api.vercel.com/v1/integrations/deploy/prj_ohmVbegOusEdKeWl38dyGeDPE3Mu/6f3cRxaCRo`,
   upload `content/content.json` + `content/content.schema.json`.
