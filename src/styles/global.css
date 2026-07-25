@@ -20,12 +20,12 @@
 
   /* Text */
   --color-cream: #F1E7D3;      /* primary text on dark */
-  --color-fog: #A2917A;        /* muted body / secondary text */
+  --color-fog: #B5A48D;        /* muted body / secondary text — lifted for readability on dark */
 
   /* Fonts */
   --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
-  --font-sans: "Newsreader", Georgia, "Times New Roman", serif;
-  --font-mono: "DM Mono", ui-monospace, "SF Mono", monospace;
+  --font-sans: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", monospace;
 
   /* Easings */
   --ease-sigmoid: cubic-bezier(0.22, 1, 0.36, 1);
@@ -58,10 +58,20 @@ html.lenis body {
 
 body {
   font-family: var(--font-sans);
-  font-weight: 400;
+  font-weight: 450;
   line-height: 1.6;
   font-optical-sizing: auto;
   overflow-x: hidden;
+}
+
+/* Smaller serif headings (non-display) sit at Medium */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+/* Mono UI text — buttons, nav, labels — at Medium */
+.font-mono {
+  font-weight: 500;
 }
 
 ::selection {
@@ -69,9 +79,10 @@ body {
   color: var(--color-ink);
 }
 
-/* Playfair Display for big editorial display type */
+/* Playfair Display for big editorial display type — Medium, still high-contrast */
 .font-display {
   font-family: var(--font-display);
+  font-weight: 500;
   letter-spacing: -0.005em;
   line-height: 1.0;
 }
