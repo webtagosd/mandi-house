@@ -26,7 +26,7 @@ const [addressSuburb, addressCity] = business.address.line2.split(", ");
       <div>
         <p class="kicker mb-4">Visit</p>
         <p class="text-cream/80 leading-relaxed text-sm">
-          <span data-wt="business.address.line1">{business.address.line1}</span><br /><span data-wt="business.address.line2">{addressSuburb}</span><br />{addressCity}
+          <span data-wt="business.address.line1">{business.address.line1}</span><br /><span data-wt="business.address.line2" set:html={`${addressSuburb}<br />${addressCity}`} />
         </p>
       </div>
       <div>

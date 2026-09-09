@@ -60,6 +60,14 @@ const { reviews } = content;
 <script is:inline>
   (function () {
     function init() {
+      // Never auto-cycle inside the dashboard's editor/preview canvas — the
+      // rotation would fight the editor-bridge's wt-content/wt-patch paints
+      // on these same three DOM slots (see src/scripts/editor-bridge.ts).
+      try {
+        var params = new URLSearchParams(window.location.search);
+        if (params.get("wt-edit") === "1" || params.get("wt-preview") === "1") return;
+      } catch (e) {}
+
       var dataEl = document.getElementById("reviews-data");
       var featured = document.getElementById("rev-featured");
       if (!dataEl || !featured) return;
