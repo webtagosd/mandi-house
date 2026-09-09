@@ -1,71 +1,67 @@
 ---
 // Our Story — folded into the single page (anchor #story).
-// FOUNDING STORY DETAILS ARE PLACEHOLDERS — confirm the real story with Mandi House.
+import content from "../../content/content.json";
+const { story } = content;
+
+// The headline has one saffron-highlighted phrase mid-sentence. Split it out
+// at render time so the design survives while story.headline stays a single
+// editable field.
+// ponytail: a dashboard edit to story.headline re-renders as flat text (the
+// highlight split only applies to the shipped copy) — acceptable for a demo;
+// upgrade to a rich-text/highlight-range field if a client needs to keep
+// editing this specific accent.
+const HIGHLIGHT = "slow-smoked together";
+const hIdx = story.headline.indexOf(HIGHLIGHT);
+const headlineBefore = hIdx >= 0 ? story.headline.slice(0, hIdx) : story.headline;
+const headlineAfter = hIdx >= 0 ? story.headline.slice(hIdx + HIGHLIGHT.length) : "";
 ---
 
 <section id="story" class="relative z-10 bg-ink px-6 md:px-12 pt-12 md:pt-16 pb-12 md:pb-16 scroll-mt-24 border-t border-brass/10">
   <div class="mx-auto max-w-[110rem]">
-    <p class="kicker mb-6" data-reveal>Our Story</p>
+    <p class="kicker mb-6" data-reveal data-wt="story.kicker">{story.kicker}</p>
 
     <div class="grid md:grid-cols-12 gap-12">
       <div class="md:col-span-7">
-        <h2 class="font-display font-light text-cream text-4xl md:text-6xl xl:text-7xl leading-[1.04]" data-reveal>
-          Mandi is a Yemeni word for a way of cooking. Meat and rice,
-          <span class="text-saffron">slow-smoked together</span> until they
-          belong to each other.
+        <h2 class="font-display font-light text-cream text-4xl md:text-6xl xl:text-7xl leading-[1.04]" data-reveal data-wt="story.headline">
+          {headlineBefore}<span class="text-saffron">{HIGHLIGHT}</span>{headlineAfter}
         </h2>
-        <p class="text-sm md:text-base text-fog leading-relaxed mt-6 max-w-xl" data-reveal>
-          Located at 573 Sandringham Road, Sandringham, Auckland, Mandi House is
-          a beloved destination for authentic Middle Eastern and South Asian
-          cuisine. Known for its signature Mandi dishes, a traditional
-          Yemeni-style rice and meat delicacy, the restaurant has carved a name
-          for itself among food lovers in Auckland's bustling Sandringham food
-          district.
+        <p class="text-sm md:text-base text-fog leading-relaxed mt-6 max-w-xl" data-reveal data-wt="story.body1">
+          {story.body1}
         </p>
-        <p class="text-sm md:text-base text-fog leading-relaxed mt-4 max-w-xl" data-reveal>
-          Mandi House offers a casual yet inviting atmosphere, perfect for both
-          dine-in and takeaway. The menu features a wide variety of dishes,
-          including chicken and lamb mandi, biryanis, kebabs, curries, fried
-          rice, and wraps. Their generous portions, affordable pricing, and
-          bold, aromatic spices make it a favourite for group meals and family
-          feasts. Prices start from around $17.99 for a single serve, with
-          family platters also available.
+        <p class="text-sm md:text-base text-fog leading-relaxed mt-4 max-w-xl" data-reveal data-wt="story.body2">
+          {story.body2}
         </p>
-        <p class="text-sm md:text-base text-fog leading-relaxed mt-4 max-w-xl" data-reveal>
-          Their standout offering, the whole lamb leg mandi, is especially
-          popular for special occasions and weekend feasts. Vegetarians aren't
-          left out either, with options like paneer tikka, vegetarian wraps, and
-          rice bowls. In addition to the regular menu, Mandi House frequently
-          offers weekend specials such as zafrani chicken biryani and lamb paya,
-          which attract a loyal following. The friendly service and quick
-          turnaround time only add to the appeal.
+        <p class="text-sm md:text-base text-fog leading-relaxed mt-4 max-w-xl" data-reveal data-wt="story.body3">
+          {story.body3}
         </p>
       </div>
 
       <div class="md:col-span-5 md:col-start-8 flex flex-col gap-7">
         <div data-reveal>
           <p class="kicker mb-3">What we believe</p>
-          <p class="text-cream text-xl md:text-2xl font-display font-light">
-            Generous portions. Honest pricing. Bold, aromatic spice.
+          <p class="text-cream text-xl md:text-2xl font-display font-light" data-wt="story.believe">
+            {story.believe}
           </p>
         </div>
         <div class="border-t border-brass/15 pt-6" data-reveal>
           <p class="kicker mb-3">How we cook</p>
-          <p class="text-fog leading-relaxed">
-            Charcoal, time, and overnight marinades. Nothing rushed, nothing cut short.
+          <p class="text-fog leading-relaxed" data-wt="story.cook">
+            {story.cook}
           </p>
         </div>
         <div class="border-t border-brass/15 pt-6" data-reveal>
           <p class="kicker mb-3">Who it's for</p>
-          <p class="text-fog leading-relaxed">
-            Families, friends and late-night tables who came to share.
+          <p class="text-fog leading-relaxed" data-wt="story.who">
+            {story.who}
           </p>
         </div>
 
         <!-- founder / kitchen image — grows to fill the column so both sides end together -->
         <div class="relative flex-1 min-h-[260px] rounded-2xl overflow-hidden border border-brass/15 bg-espresso mt-1" data-reveal>
           <img
-            src="/images/our-story.webp"
+            src={story.image}
+            data-wt-attr="src"
+            data-wt="story.image"
             alt="A Mandi House platter, served"
             loading="lazy"
             class="absolute inset-0 w-full h-full object-cover"

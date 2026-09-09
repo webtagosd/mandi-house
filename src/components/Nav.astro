@@ -1,16 +1,16 @@
 ---
 // Shared nav. `solid` forces an opaque background (use on the Menu page).
+import content from "../../content/content.json";
+
 interface Props {
   solid?: boolean;
 }
 const { solid = false } = Astro.props;
 
-// Single-page anchors live on "/"; Menu is its own page.
-const links = [
-  { href: "/#story", label: "Story" },
-  { href: "/menu", label: "Menu" },
-  { href: "/#visit", label: "Visit" },
-];
+// Single-page anchors live on "/"; Menu is its own page. Hrefs are site
+// structure (not dashboard-editable); only the labels come from content.json.
+const hrefs = ["/#story", "/menu", "/#visit"];
+const links = content.nav.links.map((l, i) => ({ href: hrefs[i], label: l.label }));
 ---
 
 <header
@@ -34,9 +34,10 @@ const links = [
 
     <div class="hidden md:flex items-center gap-10">
       {
-        links.map((l) => (
+        links.map((l, i) => (
           <a
             href={l.href}
+            data-wt={`nav.links.${i}.label`}
             class="link-underline text-sm tracking-wide uppercase font-mono text-cream/80 hover:text-cream"
           >
             {l.label}
@@ -44,12 +45,14 @@ const links = [
         ))
       }
       <a
-        href="https://www.ordermeal.co.nz/mandi-house/"
+        href={content.business.orderUrl}
+        data-wt-attr="href"
+        data-wt="business.orderUrl"
         target="_blank"
         rel="noopener"
         class="text-xs font-mono uppercase tracking-widest px-6 py-2.5 bg-saffron text-ink rounded-full hover:bg-cream transition-colors duration-300"
       >
-        Order Now
+        <span data-wt="nav.orderLabel">{content.nav.orderLabel}</span>
       </a>
     </div>
 
@@ -70,19 +73,21 @@ const links = [
     class="md:hidden hidden flex-col bg-ink/97 backdrop-blur-md border-t border-brass/15 px-6 py-8 gap-6"
   >
     {
-      links.map((l) => (
-        <a href={l.href} class="font-display text-3xl text-cream nav-link">
+      links.map((l, i) => (
+        <a href={l.href} data-wt={`nav.links.${i}.label`} class="font-display text-3xl text-cream nav-link">
           {l.label}
         </a>
       ))
     }
     <a
-      href="https://www.ordermeal.co.nz/mandi-house/"
+      href={content.business.orderUrl}
+      data-wt-attr="href"
+      data-wt="business.orderUrl"
       target="_blank"
       rel="noopener"
       class="mt-3 inline-block text-xs font-mono uppercase tracking-widest px-6 py-3 bg-saffron text-ink rounded-full self-start"
     >
-      Order Now
+      <span data-wt="nav.orderLabel">{content.nav.orderLabel}</span>
     </a>
   </div>
 </header>

@@ -1,6 +1,8 @@
 ---
 // Full-viewport nocturnal hero with a slow-motion mandi loop video behind
 // the wordmark. Poster paints instantly; dark overlays keep text legible.
+import content from "../../content/content.json";
+const { hero } = content;
 ---
 
 <section
@@ -16,9 +18,11 @@
     loop
     playsinline
     preload="metadata"
-    poster="/videos/hero-poster.jpg"
+    poster={hero.poster}
+    data-wt-attr="poster"
+    data-wt="hero.poster"
   >
-    <source src="/videos/hero.mp4" type="video/mp4" />
+    <source src={hero.video} data-wt-attr="src" data-wt="hero.video" type="video/mp4" />
   </video>
 
   <!-- overlays for legibility -->
@@ -28,25 +32,29 @@
   <!-- Content -->
   <div class="relative z-10 mx-auto max-w-[110rem] w-full px-6 md:px-12 pb-20 md:pb-28">
     <h1 class="font-display font-light text-cream text-[22vw] md:text-[14vw] xl:text-[12vw] leading-[0.9]">
-      <span class="block overflow-hidden"><span class="block" data-load>Mandi</span></span>
-      <span class="block overflow-hidden"><span class="block italic text-saffron" data-load>House</span></span>
+      <span class="block overflow-hidden"><span class="block" data-load data-wt="hero.headline.line1">{hero.headline.line1}</span></span>
+      <span class="block overflow-hidden"><span class="block italic text-saffron" data-load data-wt="hero.headline.line2">{hero.headline.line2}</span></span>
     </h1>
 
     <div class="mt-10 md:mt-12 flex flex-wrap items-center justify-center gap-4" data-load>
       <a
-        href="/menu"
+        href={hero.ctaPrimary.href}
+        data-wt-attr="href"
+        data-wt="hero.ctaPrimary.href"
         class="group inline-flex items-center gap-2.5 text-xs font-mono uppercase tracking-[0.2em] pl-8 pr-7 py-4 bg-saffron text-ink rounded-full hover:bg-cream transition-colors duration-300"
       >
-        View the menu
+        <span data-wt="hero.ctaPrimary.label">{hero.ctaPrimary.label}</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
           <path d="M5 12h14M13 6l6 6-6 6" />
         </svg>
       </a>
       <a
-        href="/#visit"
+        href={hero.ctaSecondary.href}
+        data-wt-attr="href"
+        data-wt="hero.ctaSecondary.href"
         class="inline-flex items-center text-xs font-mono uppercase tracking-[0.2em] px-8 py-4 rounded-full border border-cream/25 text-cream/90 hover:border-saffron hover:text-saffron transition-colors duration-300"
       >
-        Book a table
+        <span data-wt="hero.ctaSecondary.label">{hero.ctaSecondary.label}</span>
       </a>
     </div>
   </div>

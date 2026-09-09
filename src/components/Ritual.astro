@@ -1,25 +1,7 @@
 ---
 // The mandi ritual, told in three alternating text + image rows.
-const beats = [
-  {
-    n: "01",
-    title: "Marinated overnight",
-    desc: "Lamb and chicken rest in a blend of warm spice: cardamom, clove, black lime, until the flavour runs deep.",
-    img: "/images/ritual/ritual-1.webp",
-  },
-  {
-    n: "02",
-    title: "Smoked low and slow",
-    desc: "Cooked over charcoal until the meat gives way at a touch and the smoke settles into the rice beneath.",
-    img: "/images/ritual/ritual-2.webp",
-  },
-  {
-    n: "03",
-    title: "Served to share",
-    desc: "One platter, set in the middle of the table. Eaten with the hands. The way it's meant to be.",
-    img: "/images/ritual/ritual-3.webp",
-  },
-];
+import content from "../../content/content.json";
+const { ritual } = content;
 ---
 
 <section class="relative z-10 bg-espresso overflow-hidden">
@@ -29,25 +11,24 @@ const beats = [
   <div class="relative mx-auto max-w-[110rem] px-6 md:px-12 py-28 md:py-40">
     <!-- header -->
     <div class="max-w-3xl mb-16 md:mb-24">
-      <p class="kicker mb-6" data-reveal>02 · The Ritual</p>
+      <p class="kicker mb-6" data-reveal data-wt="ritual.kicker">{ritual.kicker}</p>
       <h2 class="font-display font-light text-cream text-5xl md:text-7xl leading-[0.95]" data-reveal>
-        Mandi isn't cooked fast<span class="text-saffron">.</span>
+        <span data-wt="ritual.headline">{ritual.headline.replace(/\.$/, "")}</span><span class="text-saffron">.</span>
       </h2>
-      <p class="body-lg mt-8 max-w-xl" data-reveal>
-        It's a Yemeni way of cooking that takes its time. We honour it the old
-        way, then bring it to a Sandringham night.
+      <p class="body-lg mt-8 max-w-xl" data-reveal data-wt="ritual.intro">
+        {ritual.intro}
       </p>
     </div>
 
     <!-- alternating beats -->
     <div class="flex flex-col gap-16 md:gap-20">
       {
-        beats.map((b, i) => (
+        ritual.steps.map((b, i) => (
           <div class="grid md:grid-cols-12 gap-10 md:gap-16 items-center">
             <div class:list={["md:col-span-5", i % 2 === 1 ? "md:order-2" : ""]} data-reveal>
-              <span class="font-mono text-saffron text-base tracking-[0.25em]">{b.n}</span>
-              <h3 class="font-display font-light text-cream text-4xl md:text-5xl xl:text-6xl leading-[1.02] mt-5 mb-6">{b.title}</h3>
-              <p class="text-fog text-lg md:text-xl leading-relaxed max-w-xl">{b.desc}</p>
+              <span class="font-mono text-saffron text-base tracking-[0.25em]" data-wt={`ritual.steps.${i}.n`}>{b.n}</span>
+              <h3 class="font-display font-light text-cream text-4xl md:text-5xl xl:text-6xl leading-[1.02] mt-5 mb-6" data-wt={`ritual.steps.${i}.title`}>{b.title}</h3>
+              <p class="text-fog text-lg md:text-xl leading-relaxed max-w-xl" data-wt={`ritual.steps.${i}.desc`}>{b.desc}</p>
             </div>
             <div
               class:list={[
@@ -58,7 +39,9 @@ const beats = [
               data-reveal
             >
               <img
-                src={b.img}
+                src={b.image}
+                data-wt-attr="src"
+                data-wt={`ritual.steps.${i}.image`}
                 alt={b.title}
                 loading="lazy"
                 class="absolute inset-0 w-full h-full object-cover"

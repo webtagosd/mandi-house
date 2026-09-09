@@ -1,40 +1,21 @@
 ---
 // Two-row infinite image marquee — "showcase all the menu items".
-// PLACEHOLDERS FOR NOW: leave the arrays empty to render styled empty frames.
-// To add photos later, drop files in public/images/gallery/ and list them, e.g.
-//   const rowOne = ["/images/gallery/01.jpg", "/images/gallery/02.jpg", ...];
-const rowOne: string[] = [
-  "/images/gallery/g9588.webp",
-  "/images/gallery/g9600.webp",
-  "/images/gallery/g9607.webp",
-  "/images/gallery/g9606.webp",
-  "/images/gallery/g9589.webp",
-  "/images/gallery/g9601.webp",
-  "/images/gallery/g9596.webp",
-  "/images/gallery/g9590.webp",
-  "/images/gallery/g9609.webp",
-];
-const rowTwo: string[] = [
-  "/images/gallery/g9599.webp",
-  "/images/gallery/g9605.webp",
-  "/images/gallery/g9593.webp",
-  "/images/gallery/g9608.webp",
-  "/images/gallery/g9602.webp",
-  "/images/gallery/g9610.webp",
-  "/images/gallery/g9594.webp",
-  "/images/gallery/g9603.webp",
-  "/images/gallery/g9598.webp",
-];
+import content from "../../content/content.json";
+const { gallery } = content;
 
 const PLACEHOLDERS_PER_ROW = 7;
 
 // If a row has no real images yet, fill it with placeholder slots.
-const makeRow = (imgs: string[]) =>
+const makeRow = (imgs: typeof gallery.row1) =>
   imgs.length ? imgs : Array.from({ length: PLACEHOLDERS_PER_ROW }, () => null);
 
-// Duplicate each row for a seamless -50% loop.
-const trackOne = [...makeRow(rowOne), ...makeRow(rowOne)];
-const trackTwo = [...makeRow(rowTwo), ...makeRow(rowTwo)];
+// Duplicate each row for a seamless -50% loop. The second copy is a visual
+// repeat of the same images, not bound (only the first copy carries data-wt,
+// so each content.json image is bound exactly once).
+const rowOne = makeRow(gallery.row1);
+const rowTwo = makeRow(gallery.row2);
+const trackOne = [...rowOne, ...rowOne];
+const trackTwo = [...rowTwo, ...rowTwo];
 ---
 
 <section class="relative z-10 bg-coal overflow-hidden py-28 md:py-40">
@@ -43,13 +24,12 @@ const trackTwo = [...makeRow(rowTwo), ...makeRow(rowTwo)];
 
   <!-- heading -->
   <div class="relative z-10 px-6 md:px-12 text-center max-w-3xl mx-auto mb-16 md:mb-20">
-    <p class="kicker mb-6" data-reveal>The Table</p>
+    <p class="kicker mb-6" data-reveal data-wt="gallery.kicker">{gallery.kicker}</p>
     <h2 class="font-display font-light text-cream text-5xl md:text-7xl leading-[0.95]" data-reveal>
-      A unique <span class="italic text-saffron">experience.</span>
+      <span data-wt="gallery.headlineLine1">{gallery.headlineLine1}</span> <span class="italic text-saffron" data-wt="gallery.headlineLine2">{gallery.headlineLine2}</span>
     </h2>
-    <p class="body-lg mt-7" data-reveal>
-      A symphony of flavour where ancient tradition meets fire. Every plate is
-      built to be shared, and felt.
+    <p class="body-lg mt-7" data-reveal data-wt="gallery.intro">
+      {gallery.intro}
     </p>
   </div>
 
@@ -57,10 +37,17 @@ const trackTwo = [...makeRow(rowTwo), ...makeRow(rowTwo)];
   <div class="gallery-rows relative z-10 flex flex-col gap-5 md:gap-6">
     <div class="scroll-mask">
       <div class="row-track flex gap-5 md:gap-6 w-max">
-        {trackOne.map((src, i) => (
+        {trackOne.map((img, i) => (
           <div class="gallery-tile shrink-0 h-40 md:h-52 lg:h-60 aspect-[4/3] rounded-2xl overflow-hidden border border-brass/15 bg-espresso relative">
-            {src ? (
-              <img src={src} alt="Mandi House dish" class="w-full h-full object-cover" loading="lazy" />
+            {img ? (
+              <img
+                src={img.photo}
+                data-wt-attr="src"
+                data-wt={i < rowOne.length ? `gallery.row1.${i}.photo` : undefined}
+                alt="Mandi House dish"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
             ) : (
               <span class="absolute inset-0 flex items-center justify-center text-brass/25">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8" aria-hidden="true">
@@ -77,10 +64,17 @@ const trackTwo = [...makeRow(rowTwo), ...makeRow(rowTwo)];
 
     <div class="scroll-mask">
       <div class="row-track reverse flex gap-5 md:gap-6 w-max">
-        {trackTwo.map((src, i) => (
+        {trackTwo.map((img, i) => (
           <div class="gallery-tile shrink-0 h-40 md:h-52 lg:h-60 aspect-[4/3] rounded-2xl overflow-hidden border border-brass/15 bg-espresso relative">
-            {src ? (
-              <img src={src} alt="Mandi House dish" class="w-full h-full object-cover" loading="lazy" />
+            {img ? (
+              <img
+                src={img.photo}
+                data-wt-attr="src"
+                data-wt={i < rowTwo.length ? `gallery.row2.${i}.photo` : undefined}
+                alt="Mandi House dish"
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
             ) : (
               <span class="absolute inset-0 flex items-center justify-center text-brass/25">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8" aria-hidden="true">
@@ -102,7 +96,7 @@ const trackTwo = [...makeRow(rowTwo), ...makeRow(rowTwo)];
       href="/menu"
       class="group inline-flex items-center gap-2.5 text-xs font-mono uppercase tracking-[0.2em] pl-8 pr-7 py-4 bg-saffron text-ink rounded-full hover:bg-cream transition-colors duration-300"
     >
-      Explore the menu
+      <span data-wt="gallery.ctaLabel">{gallery.ctaLabel}</span>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" aria-hidden="true">
         <path d="M5 12h14M13 6l6 6-6 6" />
       </svg>

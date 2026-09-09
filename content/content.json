@@ -18,10 +18,18 @@
       "facebook": ""
     }
   },
+  "nav": {
+    "links": [
+      { "label": "Story" },
+      { "label": "Menu" },
+      { "label": "Visit" }
+    ],
+    "orderLabel": "Order Now"
+  },
   "hero": {
     "headline": {
       "line1": "Mandi",
-      "line2": "House."
+      "line2": "House"
     },
     "video": "/videos/hero.mp4",
     "poster": "/videos/hero-poster.jpg",
@@ -34,13 +42,27 @@
       "href": "/#visit"
     }
   },
+  "dishes": {
+    "kicker": "01 · From the Fire",
+    "headlineLine1": "The platters",
+    "headlineLine2": "people drive for.",
+    "linkLabel": "Full menu →",
+    "items": [
+      { "n": "01", "name": "Chicken Mandi", "desc": "Smoke-roasted chicken on a bed of saffron basmati, slow-cooked over charcoal.", "price": "$19", "image": "/images/dishes/chicken-mandi.webp" },
+      { "n": "02", "name": "Lamb Mandi", "desc": "Fall-apart lamb, aromatic rice, fried onion and a dusting of mixed spice.", "price": "$24", "image": "/images/dishes/lamb-mandi.webp" },
+      { "n": "03", "name": "Mixed Grill", "desc": "Charcoal skewers: kebab, tikka and wings, off the open fire.", "price": "$26", "image": "/images/dishes/mixed-grill.webp" },
+      { "n": "04", "name": "Chicken Steak", "desc": "Grilled chicken steak with fries, garden salad and fresh-baked bread.", "price": "$20", "image": "/images/dishes/chicken-steak.webp" },
+      { "n": "05", "name": "Lamb Paya", "desc": "Slow-simmered overnight broth, served with fresh bread.", "price": "$18", "image": "/images/dishes/lamb-paya.webp" },
+      { "n": "06", "name": "Chicken Salad", "desc": "Char-grilled chicken over fresh garden leaves, with fries and a squeeze of lemon.", "price": "$17", "image": "/images/dishes/chicken-salad.webp" }
+    ]
+  },
   "story": {
     "kicker": "Our Story",
     "headline": "Mandi is a Yemeni word for a way of cooking. Meat and rice, slow-smoked together until they belong to each other.",
     "body1": "Located at 573 Sandringham Road, Sandringham, Auckland, Mandi House is a beloved destination for authentic Middle Eastern and South Asian cuisine. Known for its signature Mandi dishes, a traditional Yemeni-style rice and meat delicacy, the restaurant has carved a name for itself among food lovers in Auckland's bustling Sandringham food district.",
     "body2": "Mandi House offers a casual yet inviting atmosphere, perfect for both dine-in and takeaway. The menu features a wide variety of dishes, including chicken and lamb mandi, biryanis, kebabs, curries, fried rice, and wraps. Their generous portions, affordable pricing, and bold, aromatic spices make it a favourite for group meals and family feasts. Prices start from around $17.99 for a single serve, with family platters also available.",
     "body3": "Their standout offering, the whole lamb leg mandi, is especially popular for special occasions and weekend feasts. Vegetarians aren't left out either, with options like paneer tikka, vegetarian wraps, and rice bowls. In addition to the regular menu, Mandi House frequently offers weekend specials such as zafrani chicken biryani and lamb paya, which attract a loyal following. The friendly service and quick turnaround time only add to the appeal.",
-    "image": "",
+    "image": "/images/our-story.webp",
     "believe": "Generous portions. Honest pricing. Bold, aromatic spice.",
     "cook": "Charcoal, time, and overnight marinades. Nothing rushed, nothing cut short.",
     "who": "Families, friends and late-night tables who came to share."
@@ -54,20 +76,49 @@
         "n": "01",
         "title": "Marinated overnight",
         "desc": "Lamb and chicken rest in a blend of warm spice: cardamom, clove, black lime, until the flavour runs deep.",
-        "image": ""
+        "image": "/images/ritual/ritual-1.webp"
       },
       {
         "n": "02",
         "title": "Smoked low and slow",
         "desc": "Cooked over charcoal until the meat gives way at a touch and the smoke settles into the rice beneath.",
-        "image": ""
+        "image": "/images/ritual/ritual-2.webp"
       },
       {
         "n": "03",
         "title": "Served to share",
         "desc": "One platter, set in the middle of the table. Eaten with the hands. The way it's meant to be.",
-        "image": ""
+        "image": "/images/ritual/ritual-3.webp"
       }
+    ]
+  },
+  "gallery": {
+    "kicker": "The Table",
+    "headlineLine1": "A unique",
+    "headlineLine2": "experience.",
+    "intro": "A symphony of flavour where ancient tradition meets fire. Every plate is built to be shared, and felt.",
+    "ctaLabel": "Explore the menu",
+    "row1": [
+      { "id": "g9588", "photo": "/images/gallery/g9588.webp" },
+      { "id": "g9600", "photo": "/images/gallery/g9600.webp" },
+      { "id": "g9607", "photo": "/images/gallery/g9607.webp" },
+      { "id": "g9606", "photo": "/images/gallery/g9606.webp" },
+      { "id": "g9589", "photo": "/images/gallery/g9589.webp" },
+      { "id": "g9601", "photo": "/images/gallery/g9601.webp" },
+      { "id": "g9596", "photo": "/images/gallery/g9596.webp" },
+      { "id": "g9590", "photo": "/images/gallery/g9590.webp" },
+      { "id": "g9609", "photo": "/images/gallery/g9609.webp" }
+    ],
+    "row2": [
+      { "id": "g9599", "photo": "/images/gallery/g9599.webp" },
+      { "id": "g9605", "photo": "/images/gallery/g9605.webp" },
+      { "id": "g9593", "photo": "/images/gallery/g9593.webp" },
+      { "id": "g9608", "photo": "/images/gallery/g9608.webp" },
+      { "id": "g9602", "photo": "/images/gallery/g9602.webp" },
+      { "id": "g9610", "photo": "/images/gallery/g9610.webp" },
+      { "id": "g9594", "photo": "/images/gallery/g9594.webp" },
+      { "id": "g9603", "photo": "/images/gallery/g9603.webp" },
+      { "id": "g9598", "photo": "/images/gallery/g9598.webp" }
     ]
   },
   "menu": {
@@ -138,12 +189,36 @@
       { "section": "Drinks", "name": "Green Tea Pot", "desc": "A pot of green tea.", "price": "$12.00" }
     ]
   },
+  "menuPage": {
+    "headlineLine1": "Generous by",
+    "headlineLine2": "design.",
+    "ctaKicker": "Hungry yet?",
+    "ctaHeadline": "Come in tonight.",
+    "ctaLabel": "Find us",
+    "metaTitle": "Menu · Mandi House",
+    "metaDescription": "Yemeni mandi, charcoal grills, karahi, biryani and slow broths. The full Mandi House menu, Sandringham, Auckland."
+  },
+  "domeReveal": {
+    "kicker": "04 · The Unveiling",
+    "caption1": "Lift the lid.",
+    "caption2": "Saffron, smoke and slow fire.",
+    "platterImage": "/images/mandi-platter.webp",
+    "platterAlt": "Mandi House whole-lamb mandi platter with saffron rice, kebabs, chicken, nuts, bread and sauces"
+  },
   "reviews": {
-    "eyebrow": "04 · Word of Mouth",
+    "eyebrow": "03 · Word of Mouth",
+    "ratingLabel": "4.6 on Google",
     "list": [
-      { "quote": "The lamb mandi falls apart and the rice is unreal. Biggest portions in Sandringham, we always over-order.", "name": "[PLACEHOLDER_REVIEW_1]", "meta": "Google review" },
-      { "quote": "Found my new late-night spot. Generous, properly spiced, and the bread comes out hot.", "name": "[PLACEHOLDER_REVIEW_2]", "meta": "Google review" },
-      { "quote": "Ordered the whole lamb leg for a birthday. Whole table went quiet. That good.", "name": "[PLACEHOLDER_REVIEW_3]", "meta": "Google review" }
+      { "quote": "We tried the Mixed Platter and it was absolutely delicious. The meat was tender, flavorful, and perfectly cooked, with generous portions that were great for sharing.", "name": "Sajna Ali Sadique", "meta": "Google review" },
+      { "quote": "The food was brilliantly divine. Be sure to subject your taste buds to a burst of flavours at every morsel.", "name": "Swetha Chepur", "meta": "Google review" },
+      { "quote": "The ambiance is really nice, food 10/10. Came from the city to just have mandi rice here. One of the best places in Auckland.", "name": "Krisha Bhujel", "meta": "Google review" },
+      { "quote": "This spot is amazing! The platter is huge and loaded with delicious, perfectly cooked meats and sides. A must-try!", "name": "Hamna Noor", "meta": "Google review" },
+      { "quote": "It's easily the best mandi I've had in New Zealand. The rice is perfectly cooked, aromatic, and full of spices, and the meat is tender, juicy, and well-marinated.", "name": "Rajesh C", "meta": "Google review" },
+      { "quote": "Mandi House catered for a celebration at our home. Our guests loved the food and we were happy the restaurant could accommodate our Sunday lunch order.", "name": "Rowena D'Souza", "meta": "Google review" },
+      { "quote": "Amazing service by the staff and great food! We ordered the chicken tikka kebab and lamb steak platter. Definitely recommend Mandi House!", "name": "Ayesha Rahman", "meta": "Google review" },
+      { "quote": "Seriously good food. We tried their Chicken Mandi and mixed platter. Highly recommend this one.", "name": "Melvin Mathew Vaidian", "meta": "Google review" },
+      { "quote": "We had an amazing experience. The food, atmosphere, and overall service were excellent. A special thanks to Salena, who was incredibly humble, friendly and attentive.", "name": "Sanji Grg", "meta": "Google review" },
+      { "quote": "Delicious food and very generous portions!", "name": "Pippi Butterworth", "meta": "Google review" }
     ]
   },
   "visit": {
@@ -158,7 +233,7 @@
   },
   "footer": {
     "signoff": "Come hungry.",
-    "credit": "Website created by webtag.co.nz",
+    "credit": "Site made by WebTag",
     "creditUrl": "https://webtag.co.nz"
   },
   "seo": {
