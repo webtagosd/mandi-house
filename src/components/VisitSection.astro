@@ -1,12 +1,14 @@
 ---
 // Visit — folded into the single page (anchor #visit).
+import content from "../../content/content.json";
+const { business, visit } = content;
 ---
 
 <section id="visit" class="relative z-10 bg-charcoal px-6 md:px-12 py-28 md:py-40 scroll-mt-24">
   <div class="mx-auto max-w-[110rem]">
-    <p class="kicker mb-6" data-reveal>Visit</p>
+    <p class="kicker mb-6" data-reveal data-wt="visit.kicker">{visit.kicker}</p>
     <h2 class="font-display font-light text-cream text-5xl md:text-7xl xl:text-8xl leading-[0.95] mb-16" data-reveal>
-      Find us on<br /><span class="italic text-saffron">Sandringham Road.</span>
+      Find us on<br /><span class="italic text-saffron" data-wt="visit.headline">{visit.headline.replace(/^Find us on\s*/, "")}</span>
     </h2>
 
     <div class="grid md:grid-cols-12 gap-12">
@@ -15,24 +17,24 @@
         <div class="border-t border-brass/15 pt-6" data-reveal>
           <p class="kicker mb-3">Address</p>
           <p class="text-cream text-xl md:text-2xl font-display font-light leading-snug">
-            573 Sandringham Road<br />Sandringham, Auckland 1025
+            <span data-wt="business.address.line1">{business.address.line1}</span><br /><span data-wt="business.address.line2">{business.address.line2}</span>
           </p>
         </div>
 
         <div class="border-t border-brass/15 pt-6" data-reveal>
           <p class="kicker mb-4">Hours</p>
           <ul class="flex flex-col gap-2 text-cream/90">
-            <li class="flex justify-between"><span>Monday – Thursday</span><span class="font-mono text-fog">5pm – 11pm</span></li>
-            <li class="flex justify-between"><span>Friday</span><span class="font-mono text-fog">5pm – 12am</span></li>
-            <li class="flex justify-between"><span>Saturday – Sunday</span><span class="font-mono text-fog">12pm – 12am</span></li>
+            <li class="flex justify-between"><span>Monday – Thursday</span><span class="font-mono text-fog" data-wt="visit.hours.weekday">{visit.hours.weekday}</span></li>
+            <li class="flex justify-between"><span>Friday</span><span class="font-mono text-fog" data-wt="visit.hours.friday">{visit.hours.friday}</span></li>
+            <li class="flex justify-between"><span>Saturday – Sunday</span><span class="font-mono text-fog" data-wt="visit.hours.weekend">{visit.hours.weekend}</span></li>
           </ul>
         </div>
 
         <div class="border-t border-brass/15 pt-6" data-reveal>
           <p class="kicker mb-3">Reservations & takeaway</p>
-          <a href="tel:098451144" class="font-display font-light text-cream text-3xl md:text-4xl link-underline">09 845 1144</a>
-          <p class="text-fog text-sm mt-3">
-            Walk-ins welcome. For large platters and the whole lamb leg, please call ahead.
+          <a href="tel:098451144" class="font-display font-light text-cream text-3xl md:text-4xl link-underline" data-wt="business.phone.display">{business.phone.display}</a>
+          <p class="text-fog text-sm mt-3" data-wt="visit.note">
+            {visit.note}
           </p>
         </div>
       </div>
@@ -50,7 +52,9 @@
 
         <!-- open in maps button -->
         <a
-          href="https://www.google.com/maps/search/?api=1&query=Mandi+House+573+Sandringham+Road+Auckland"
+          href={business.mapUrl}
+          data-wt-attr="href"
+          data-wt="business.mapUrl"
           target="_blank" rel="noopener"
           class="absolute z-[700] bottom-4 left-4 inline-flex items-center gap-2 font-mono uppercase tracking-widest text-xs text-ink bg-saffron/95 hover:bg-cream pl-4 pr-3.5 py-2.5 rounded-full transition-colors duration-300"
         >

@@ -2,6 +2,8 @@
 // SIGNATURE MOMENT — the dome reveal.
 // A copper sahn (serving dome) lifts as the user scrolls and the real mandi
 // platter is revealed beneath, steam and all. Scroll-scrubbed via GSAP.
+import content from "../../content/content.json";
+const { domeReveal } = content;
 ---
 
 <section
@@ -10,21 +12,23 @@
   aria-label="The unveiling of the mandi"
 >
   <div id="dome-stage" class="h-[100svh] min-h-[620px] flex flex-col items-center justify-center px-6">
-    <p class="kicker mb-6 text-center">04 · The Unveiling</p>
+    <p class="kicker mb-6 text-center" data-wt="domeReveal.kicker">{domeReveal.kicker}</p>
 
     <!-- caption that crossfades -->
     <div class="relative h-16 md:h-20 w-full max-w-3xl text-center mb-2">
       <h2
         id="cap-1"
         class="absolute inset-0 font-display font-light text-cream text-4xl md:text-6xl leading-tight flex items-center justify-center"
+        data-wt="domeReveal.caption1"
       >
-        Lift the lid.
+        {domeReveal.caption1}
       </h2>
       <h2
         id="cap-2"
         class="absolute inset-0 font-display font-light text-saffron italic text-4xl md:text-6xl leading-tight flex items-center justify-center opacity-0"
+        data-wt="domeReveal.caption2"
       >
-        Saffron, smoke and slow fire.
+        {domeReveal.caption2}
       </h2>
     </div>
 
@@ -36,8 +40,10 @@
       <!-- the real platter (background removed), revealed beneath the lid -->
       <img
         id="platter-img"
-        src="/images/mandi-platter.webp"
-        alt="Mandi House whole-lamb mandi platter with saffron rice, kebabs, chicken, nuts, bread and sauces"
+        src={domeReveal.platterImage}
+        data-wt-attr="src"
+        data-wt="domeReveal.platterImage"
+        alt={domeReveal.platterAlt}
         width="802"
         height="436"
         class="absolute inset-0 w-full h-full object-contain drop-shadow-[0_28px_38px_rgba(0,0,0,0.5)]"

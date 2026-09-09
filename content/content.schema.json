@@ -19,6 +19,24 @@
       ]
     },
     {
+      "id": "nav",
+      "label": "Navigation",
+      "description": "Shared nav bar labels. Shown on every page.",
+      "fields": [
+        {
+          "key": "nav.links",
+          "type": "list",
+          "label": "Nav links",
+          "minItems": 3,
+          "maxItems": 3,
+          "itemSchema": [
+            { "key": "label", "type": "text", "label": "Label", "required": true, "maxLength": 20 }
+          ]
+        },
+        { "key": "nav.orderLabel", "type": "text", "label": "Order button label", "maxLength": 20 }
+      ]
+    },
+    {
       "id": "hero",
       "label": "Hero",
       "description": "Full-bleed hero with the background video and the wordmark headline.",
@@ -31,7 +49,36 @@
         { "key": "hero.ctaPrimary.href", "type": "text", "label": "Primary button link", "maxLength": 120 },
         { "key": "hero.ctaSecondary.label", "type": "text", "label": "Secondary button label", "maxLength": 30 },
         { "key": "hero.ctaSecondary.href", "type": "text", "label": "Secondary button link", "maxLength": 120 }
-      ]
+      ],
+      "page": "Home",
+      "path": "/"
+    },
+    {
+      "id": "dishes",
+      "label": "Signature Dishes",
+      "description": "The editorial dish grid — six signature platters.",
+      "fields": [
+        { "key": "dishes.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
+        { "key": "dishes.headlineLine1", "type": "text", "label": "Headline line 1", "maxLength": 40 },
+        { "key": "dishes.headlineLine2", "type": "text", "label": "Headline line 2", "maxLength": 40 },
+        { "key": "dishes.linkLabel", "type": "text", "label": "\"Full menu\" link label", "maxLength": 30 },
+        {
+          "key": "dishes.items",
+          "type": "list",
+          "label": "Dishes",
+          "minItems": 1,
+          "maxItems": 6,
+          "itemSchema": [
+            { "key": "n", "type": "text", "label": "Number", "maxLength": 4 },
+            { "key": "name", "type": "text", "label": "Dish name", "required": true, "maxLength": 60 },
+            { "key": "desc", "type": "longtext", "label": "Description", "maxLength": 300 },
+            { "key": "price", "type": "text", "label": "Price", "maxLength": 12 },
+            { "key": "image", "type": "image", "label": "Dish photo", "minWidth": 900, "aspectRatio": "4:3" }
+          ]
+        }
+      ],
+      "page": "Home",
+      "path": "/"
     },
     {
       "id": "story",
@@ -47,7 +94,9 @@
         { "key": "story.believe", "type": "longtext", "label": "What we believe", "maxLength": 200 },
         { "key": "story.cook", "type": "longtext", "label": "How we cook", "maxLength": 200 },
         { "key": "story.who", "type": "longtext", "label": "Who it's for", "maxLength": 200 }
-      ]
+      ],
+      "page": "Home",
+      "path": "/"
     },
     {
       "id": "ritual",
@@ -70,7 +119,96 @@
             { "key": "image", "type": "image", "label": "Image", "minWidth": 1000, "aspectRatio": "16:10" }
           ]
         }
-      ]
+      ],
+      "page": "Home",
+      "path": "/"
+    },
+    {
+      "id": "gallery",
+      "label": "Menu Gallery",
+      "description": "The two-row scrolling image marquee.",
+      "fields": [
+        { "key": "gallery.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
+        { "key": "gallery.headlineLine1", "type": "text", "label": "Headline line 1", "maxLength": 40 },
+        { "key": "gallery.headlineLine2", "type": "text", "label": "Headline line 2", "maxLength": 40 },
+        { "key": "gallery.intro", "type": "longtext", "label": "Intro", "maxLength": 300 },
+        { "key": "gallery.ctaLabel", "type": "text", "label": "CTA button label", "maxLength": 30 },
+        {
+          "key": "gallery.row1",
+          "type": "list",
+          "label": "Row 1 images",
+          "minItems": 0,
+          "maxItems": 12,
+          "itemSchema": [
+            { "key": "id", "type": "text", "label": "Reference", "required": true, "maxLength": 40, "help": "Internal reference. Leave as is." },
+            { "key": "photo", "type": "image", "label": "Photo" }
+          ]
+        },
+        {
+          "key": "gallery.row2",
+          "type": "list",
+          "label": "Row 2 images",
+          "minItems": 0,
+          "maxItems": 12,
+          "itemSchema": [
+            { "key": "id", "type": "text", "label": "Reference", "required": true, "maxLength": 40, "help": "Internal reference. Leave as is." },
+            { "key": "photo", "type": "image", "label": "Photo" }
+          ]
+        }
+      ],
+      "page": "Home",
+      "path": "/"
+    },
+    {
+      "id": "domeReveal",
+      "label": "Dome Reveal",
+      "description": "The signature scroll-scrubbed dome-lift moment.",
+      "fields": [
+        { "key": "domeReveal.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
+        { "key": "domeReveal.caption1", "type": "text", "label": "Caption 1", "maxLength": 60 },
+        { "key": "domeReveal.caption2", "type": "text", "label": "Caption 2", "maxLength": 60 },
+        { "key": "domeReveal.platterImage", "type": "image", "label": "Platter photo", "minWidth": 1200, "aspectRatio": "802:436" }
+      ],
+      "page": "Home",
+      "path": "/"
+    },
+    {
+      "id": "reviews",
+      "label": "Reviews",
+      "description": "Customer reviews. Use real Google reviews only.",
+      "fields": [
+        { "key": "reviews.eyebrow", "type": "text", "label": "Eyebrow", "maxLength": 40 },
+        { "key": "reviews.ratingLabel", "type": "text", "label": "Rating label", "maxLength": 40 },
+        {
+          "key": "reviews.list",
+          "type": "list",
+          "label": "Reviews",
+          "minItems": 0,
+          "maxItems": 30,
+          "itemSchema": [
+            { "key": "quote", "type": "longtext", "label": "Quote", "required": true, "maxLength": 400 },
+            { "key": "name", "type": "text", "label": "Reviewer name", "maxLength": 80 },
+            { "key": "meta", "type": "text", "label": "Source", "maxLength": 40 }
+          ]
+        }
+      ],
+      "page": "Home",
+      "path": "/"
+    },
+    {
+      "id": "visit",
+      "label": "Visit",
+      "description": "The Visit section — address, hours and contact.",
+      "fields": [
+        { "key": "visit.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
+        { "key": "visit.headline", "type": "text", "label": "Headline", "maxLength": 80 },
+        { "key": "visit.hours.weekday", "type": "text", "label": "Hours — Mon to Thu", "maxLength": 40 },
+        { "key": "visit.hours.friday", "type": "text", "label": "Hours — Friday", "maxLength": 40 },
+        { "key": "visit.hours.weekend", "type": "text", "label": "Hours — Sat to Sun", "maxLength": 40 },
+        { "key": "visit.note", "type": "longtext", "label": "Reservations note", "maxLength": 200 }
+      ],
+      "page": "Home",
+      "path": "/"
     },
     {
       "id": "menu",
@@ -105,40 +243,25 @@
             { "key": "price", "type": "text", "label": "Price", "maxLength": 12 }
           ]
         }
-      ]
+      ],
+      "page": "Menu",
+      "path": "/menu"
     },
     {
-      "id": "reviews",
-      "label": "Reviews",
-      "description": "Customer reviews. Use real Google reviews only.",
+      "id": "menuPage",
+      "label": "Menu Page — Header & CTA",
+      "description": "The Menu page's own header and closing call-to-action (separate from the menu items themselves).",
       "fields": [
-        { "key": "reviews.eyebrow", "type": "text", "label": "Eyebrow", "maxLength": 40 },
-        {
-          "key": "reviews.list",
-          "type": "list",
-          "label": "Reviews",
-          "minItems": 0,
-          "maxItems": 30,
-          "itemSchema": [
-            { "key": "quote", "type": "longtext", "label": "Quote", "required": true, "maxLength": 400 },
-            { "key": "name", "type": "text", "label": "Reviewer name", "maxLength": 80 },
-            { "key": "meta", "type": "text", "label": "Source", "maxLength": 40 }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "visit",
-      "label": "Visit",
-      "description": "The Visit section — address, hours and contact.",
-      "fields": [
-        { "key": "visit.kicker", "type": "text", "label": "Kicker", "maxLength": 40 },
-        { "key": "visit.headline", "type": "text", "label": "Headline", "maxLength": 80 },
-        { "key": "visit.hours.weekday", "type": "text", "label": "Hours — Mon to Thu", "maxLength": 40 },
-        { "key": "visit.hours.friday", "type": "text", "label": "Hours — Friday", "maxLength": 40 },
-        { "key": "visit.hours.weekend", "type": "text", "label": "Hours — Sat to Sun", "maxLength": 40 },
-        { "key": "visit.note", "type": "longtext", "label": "Reservations note", "maxLength": 200 }
-      ]
+        { "key": "menuPage.headlineLine1", "type": "text", "label": "Headline line 1", "maxLength": 40 },
+        { "key": "menuPage.headlineLine2", "type": "text", "label": "Headline line 2", "maxLength": 40 },
+        { "key": "menuPage.ctaKicker", "type": "text", "label": "CTA kicker", "maxLength": 40 },
+        { "key": "menuPage.ctaHeadline", "type": "text", "label": "CTA headline", "maxLength": 60 },
+        { "key": "menuPage.ctaLabel", "type": "text", "label": "CTA button label", "maxLength": 30 },
+        { "key": "menuPage.metaTitle", "type": "text", "label": "Browser tab title", "maxLength": 120 },
+        { "key": "menuPage.metaDescription", "type": "longtext", "label": "Meta description", "maxLength": 300 }
+      ],
+      "page": "Menu",
+      "path": "/menu"
     },
     {
       "id": "footer",
