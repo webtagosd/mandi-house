@@ -5,6 +5,8 @@
 //
 // Changelog:
 //   2026-09-12: wt-highlight / wt-focus / wt-outline, sections in wt-ready, preview-deploy origins.
+//   2026-09-12d: rings follow the page while it scrolls; wt-inview reports the section on
+//               screen; the highlighted section carries a name tag.
 //   2026-09-12c: resolve the editable element by hit-testing descendants, so text inside a
 //               clipping wrapper (a headline reveal mask) is still selectable.
 //   2026-09-12b: rings drawn in an overlay layer (outlines were clipped by overflow:hidden
@@ -31,6 +33,8 @@
 //                                                          the first key matching prefix; null clears
 //   ← parent  { type: "wt-focus", prefix: string | null }  dim every other section (no scroll); null clears
 //   ← parent  { type: "wt-outline", key: string | null }   ring every [data-wt=key] element; null clears
+//   → parent  { type: "wt-inview", key: string }         a section scrolled into view, carrying one of
+//                                                        its keys so the dashboard can resolve it
 //
 // Allowed origins — the dashboard(s) permitted to talk to this bridge, both
 // directions. Add future custom domains here as they come online. Vercel
@@ -140,7 +144,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     document.querySelectorAll("." + cls).forEach((el) => el.classList.remove(cls));
   };
 
-  const highlight = (prefix: string | null) => {
+  const highlight = (prefix: string | null, name?: string) => {
     const target = prefix === null ? null : sectionFor(prefix);
     if (prefix !== null && !target) return; // unknown prefix — leave the page alone
     // Undo the inline position we set for a previous highlight before clearing it.
@@ -155,6 +159,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
       target.style.position = "relative";
       target.setAttribute("data-wt-pos", "");
     }
+    target.setAttribute("data-wt-name", name || "Editing");
     target.classList.add("wt-section-on");
     // Editing the popup? Bring it back on screen; otherwise keep every modal parked.
     unparkFor(target);
@@ -229,8 +234,11 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     ringTargets[name] = target;
     paintRings();
   };
-  addEventListener("scroll", queueRings, true);
-  addEventListener("resize", queueRings);
+  // Paint synchronously while scrolling: rAF is throttled in an occluded iframe, and a ring
+  // left behind by the page looks like it is marking the wrong thing. Three rect reads is cheap.
+  const anyRing = () => Object.keys(ringTargets).some((k) => ringTargets[k]);
+  addEventListener("scroll", () => { if (anyRing()) paintRings(); }, true);
+  addEventListener("resize", () => { if (anyRing()) paintRings(); });
 
   // --- Parked overlays -------------------------------------------------------
   // Anything fixed-position that covers most of the viewport (a registration popup, a cookie
@@ -281,6 +289,38 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     });
   };
 
+  // --- Scroll tracking ------------------------------------------------------
+  // Tell the dashboard which section is on screen so its section list follows the page instead
+  // of sitting on whatever was last clicked.
+  const sectionOf = (el: Element): HTMLElement =>
+    (el.closest("section, header, footer, main > *, [data-wt-section]") ?? el) as HTMLElement;
+  let lastInView: string | null = null;
+  const reportInView = () => {
+    if (!editable) return;
+    const line = innerHeight * 0.34; // a third down the viewport reads as "what I am looking at"
+    let bestEl: Element | null = null;
+    let bestDist = Infinity;
+    allWtElements().forEach((el) => {
+      const r = sectionOf(el).getBoundingClientRect();
+      if (r.bottom < 0 || r.top > innerHeight || (!r.width && !r.height)) return;
+      const dist = r.top <= line && r.bottom >= line ? 0 : Math.min(Math.abs(r.top - line), Math.abs(r.bottom - line));
+      if (dist < bestDist) { bestDist = dist; bestEl = el; }
+    });
+    const key = bestEl ? (bestEl as Element).getAttribute("data-wt") : null;
+    if (!key || key === lastInView) return;
+    lastInView = key;
+    post({ type: "wt-inview", key });
+  };
+  let inViewTimer: ReturnType<typeof setTimeout> | null = null;
+  addEventListener(
+    "scroll",
+    () => {
+      if (inViewTimer) return;
+      inViewTimer = setTimeout(() => { inViewTimer = null; reportInView(); }, 120);
+    },
+    true
+  );
+
   window.addEventListener("message", (event: MessageEvent) => {
     try {
       if (!isAllowedOrigin(event.origin)) return;
@@ -291,6 +331,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
         key?: string | null;
         value?: unknown;
         prefix?: string | null;
+        name?: string;
       } | null;
       if (!data || typeof data !== "object") return;
       if (data.type === "wt-content" && data.content && typeof data.content === "object") {
@@ -298,7 +339,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
       } else if (data.type === "wt-patch" && typeof data.key === "string") {
         applyPatch(data.key, data.value);
       } else if (data.type === "wt-highlight" && (data.prefix === null || typeof data.prefix === "string")) {
-        highlight(data.prefix);
+        highlight(data.prefix, typeof data.name === "string" ? data.name : undefined);
       } else if (data.type === "wt-focus" && (data.prefix === null || typeof data.prefix === "string")) {
         focus(data.prefix);
       } else if (data.type === "wt-outline" && (data.key === null || typeof data.key === "string")) {
@@ -350,6 +391,10 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
       [data-wt] { cursor: default; }
       .wt-section-on { outline: 3px solid #4A90E2; outline-offset: -3px; transition: outline-color .25s; }
       .wt-section-on::after { content:""; position:absolute; inset:0; pointer-events:none; background:rgba(74,144,226,.10); animation: wtflash 1.2s ease; }
+      /* Corner tag naming the section, so it is obvious which block is being edited. */
+      .wt-section-on::before { content: attr(data-wt-name); position:absolute; z-index:2147482000; left:0; top:0; pointer-events:none;
+        background:#4A90E2; color:#fff; font:700 11px/1 ui-sans-serif,system-ui,sans-serif; letter-spacing:.08em; text-transform:uppercase;
+        padding:6px 10px; border-radius:0 0 8px 0; }
       @keyframes wtflash { from { background: rgba(74,144,226,.28); } }
       html.wt-focusmode section:not(.wt-focus-on), html.wt-focusmode header:not(.wt-focus-on), html.wt-focusmode footer:not(.wt-focus-on) { opacity:.28; filter:saturate(.4); transition: opacity .35s, filter .35s; }
       /* Rings live in their own fixed layer: an outline or box-shadow on the element itself is
