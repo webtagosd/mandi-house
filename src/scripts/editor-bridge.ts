@@ -233,7 +233,11 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     if (st.position !== "fixed" || st.display === "none" || st.visibility === "hidden") return false;
     if (parseFloat(st.opacity || "1") < 0.05) return false;
     const r = el.getBoundingClientRect();
-    return r.width >= innerWidth * 0.6 && r.height >= innerHeight * 0.6;
+    if (r.width < innerWidth * 0.6 || r.height < innerHeight * 0.6) return false;
+    // Guard: a scroll-hijack layout can pin the whole page. If this element holds most of the
+    // editable content it is the page, not a modal, and parking it would blank the canvas.
+    const total = document.querySelectorAll("[data-wt]").length;
+    return !total || el.querySelectorAll("[data-wt]").length < total * 0.4;
   };
   const parkOverlays = () => {
     if (!editable) return;
