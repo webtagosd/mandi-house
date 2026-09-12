@@ -5,6 +5,8 @@
 //
 // Changelog:
 //   2026-09-12: wt-highlight / wt-focus / wt-outline, sections in wt-ready, preview-deploy origins.
+//   2026-09-12g: a sticky section (a pinned hero) is scrolled to by its layout position,
+//               since a stuck element reports itself as already in view.
 //   2026-09-12f: data-wt-attr="background" paints a CSS background-image, so band images
 //               and empty photo slots are editable and clickable like any other picture.
 //   2026-09-12e: wt-outline can scroll its element into view, so touching a field in the
@@ -183,9 +185,23 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     parkOverlays(target);
     // Don't move the page when the client picked this section by clicking it — they are
     // already looking at it, and yanking the canvas to the section top loses their place.
-    if (!scroll || getComputedStyle(target).position === "fixed") return;
+    const pos = getComputedStyle(target).position;
+    if (!scroll || pos === "fixed") return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
+    const behavior: ScrollBehavior = reduceMotion ? "auto" : "smooth";
+    if (pos === "sticky") {
+      // A pinned hero already sits at the top of the viewport, so scrollIntoView decides it
+      // has nothing to do. Go to where the element actually lives in the document.
+      let top = 0;
+      let node: HTMLElement | null = target;
+      while (node) {
+        top += node.offsetTop;
+        node = node.offsetParent as HTMLElement | null;
+      }
+      window.scrollTo({ top: Math.max(0, top), behavior });
+    } else {
+      target.scrollIntoView({ block: "start", behavior });
+    }
     settleRings();
   };
 
