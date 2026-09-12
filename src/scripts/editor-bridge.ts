@@ -5,6 +5,8 @@
 //
 // Changelog:
 //   2026-09-12: wt-highlight / wt-focus / wt-outline, sections in wt-ready, preview-deploy origins.
+//   2026-09-12c: resolve the editable element by hit-testing descendants, so text inside a
+//               clipping wrapper (a headline reveal mask) is still selectable.
 //   2026-09-12b: rings drawn in an overlay layer (outlines were clipped by overflow:hidden
 //               ancestors), full-viewport fixed overlays parked while editing, and every
 //               link/button/form click neutralised so the canvas can't navigate away.
@@ -53,6 +55,8 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   }
   if (!mode) return;
   const editable = mode === "edit";
+  // Support marker: `document.documentElement.dataset.wtMode` says which mode the bridge armed.
+  document.documentElement.setAttribute("data-wt-mode", mode);
 
   // Origin that sent us the first valid inbound message. Until then, replies
   // fan out to every allowed origin (harmless — postMessage with an explicit
@@ -154,7 +158,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     target.classList.add("wt-section-on");
     // Editing the popup? Bring it back on screen; otherwise keep every modal parked.
     unparkFor(target);
-    parkOverlays();
+    parkOverlays(target);
     if (getComputedStyle(target).position === "fixed") return; // a modal is already in view
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
@@ -218,9 +222,12 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   const queueRings = () => {
     if (!ringFrame) ringFrame = requestAnimationFrame(paintRings);
   };
+  // Paint straight away rather than on the next animation frame: an iframe that is briefly
+  // occluded (or driven by automation) has rAF throttled, and a selection ring that arrives a
+  // second after the click reads as "clicking does nothing". rAF still coalesces scroll/resize.
   const setRing = (name: string, target: Element | null) => {
     ringTargets[name] = target;
-    queueRings();
+    paintRings();
   };
   addEventListener("scroll", queueRings, true);
   addEventListener("resize", queueRings);
@@ -239,13 +246,33 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     const total = document.querySelectorAll("[data-wt]").length;
     return !total || el.querySelectorAll("[data-wt]").length < total * 0.4;
   };
-  const parkOverlays = () => {
+  const parkOverlays = (keep?: Element | null) => {
     if (!editable) return;
     Array.from(document.body.querySelectorAll("*")).forEach((el) => {
       if (el.closest("#wt-rings")) return;
       if (el.classList.contains("wt-parked")) return;
+      if (keep && (el === keep || el.contains(keep))) return; // the modal being edited
       if (isBlockingOverlay(el)) el.classList.add("wt-parked");
     });
+  };
+
+  // Which editable element does a point belong to? `closest` alone is not enough: a template
+  // can wrap the bound element in a clipping or animating wrapper (a headline reveal mask),
+  // and the browser then hit-tests the wrapper, which carries no data-wt. So when the direct
+  // lookup misses, walk up and take the nearest bound descendant sitting under the pointer.
+  const resolveWt = (target: Element | null, x: number, y: number): Element | null => {
+    const direct = target?.closest("[data-wt]");
+    if (direct) return direct;
+    let node: Element | null = target;
+    for (let hops = 0; node && hops < 4; hops++, node = node.parentElement) {
+      const found = Array.from(node.querySelectorAll("[data-wt]")).find((el) => {
+        const r = el.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      });
+      if (found) return found;
+      if (node.tagName === "SECTION" || node.tagName === "BODY") break;
+    }
+    return null;
   };
   // Show a parked overlay again (it is the thing being edited), and park the rest.
   const unparkFor = (target: Element | null) => {
@@ -349,12 +376,15 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     setTimeout(parkOverlays, 400);
     setTimeout(parkOverlays, 1500);
 
+    const pointer = (e: Event) => e as MouseEvent;
     document.addEventListener(
       "mouseover",
-      (e) => setRing("hover", (e.target as Element | null)?.closest("[data-wt]") ?? null),
+      (e) => {
+        const m = pointer(e);
+        setRing("hover", resolveWt(m.target as Element | null, m.clientX, m.clientY));
+      },
       true
     );
-    document.addEventListener("mouseleave", () => setRing("hover", null), true);
 
     // Nothing on the page may act on a click while editing: a link would navigate the canvas
     // away (losing wt-edit), a button would fire the site's own JS, a form would submit. The
@@ -384,8 +414,9 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     document.addEventListener(
       "click",
       (e) => {
-        const t = e.target as Element | null;
-        const target = t?.closest("[data-wt]");
+        const m = pointer(e);
+        const t = m.target as Element | null;
+        const target = resolveWt(t, m.clientX, m.clientY);
         // Always kill the default: no navigation, no form post, no site handler.
         e.preventDefault();
         if (t?.closest(INTERACTIVE) || target) e.stopPropagation();
