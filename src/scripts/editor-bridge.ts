@@ -170,6 +170,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     if (getComputedStyle(target).position === "fixed") return; // a modal is already in view
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
+    settleRings();
   };
 
   // No scroll here — the dashboard sends wt-highlight first.
@@ -191,6 +192,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     if (r.top >= 64 && r.bottom <= innerHeight - 48) return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" });
+    settleRings();
   };
 
   // --- Rings: hover / selected / outline, drawn in a fixed layer -------------
@@ -248,6 +250,9 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   // Paint synchronously while scrolling: rAF is throttled in an occluded iframe, and a ring
   // left behind by the page looks like it is marking the wrong thing. Three rect reads is cheap.
   const anyRing = () => Object.keys(ringTargets).some((k) => ringTargets[k]);
+  // A smooth scroll finishes over several hundred ms and its scroll events can be throttled,
+  // which would leave a ring behind at the old position. Repaint across the whole glide.
+  const settleRings = () => [60, 180, 320, 500, 750].forEach((t) => setTimeout(() => anyRing() && paintRings(), t));
   addEventListener("scroll", () => { if (anyRing()) paintRings(); }, true);
   addEventListener("resize", () => { if (anyRing()) paintRings(); });
 
