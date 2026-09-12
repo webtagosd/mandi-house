@@ -5,6 +5,8 @@
 //
 // Changelog:
 //   2026-09-12: wt-highlight / wt-focus / wt-outline, sections in wt-ready, preview-deploy origins.
+//   2026-09-12h: focus mode un-pins sticky sections, so a hero stops sitting behind the rest
+//               of the page while the client steps through it.
 //   2026-09-12g: a sticky section (a pinned hero) is scrolled to by its layout position,
 //               since a stuck element reports itself as already in view.
 //   2026-09-12f: data-wt-attr="background" paints a CSS background-image, so band images
@@ -206,11 +208,30 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   };
 
   // No scroll here — the dashboard sends wt-highlight first.
+  // A pinned section stays put while everything scrolls over it, which in focus mode leaves a
+  // hero showing through the section being edited. Let them scroll normally while focused, and
+  // put each one back exactly as it was on the way out.
+  const setPinning = (on: boolean) => {
+    if (on) {
+      document.querySelectorAll<HTMLElement>("section, header, footer, [data-wt-section]").forEach((el) => {
+        if (el.hasAttribute("data-wt-unpinned") || getComputedStyle(el).position !== "sticky") return;
+        el.setAttribute("data-wt-unpinned", el.style.position);
+        el.style.position = "static";
+      });
+    } else {
+      document.querySelectorAll<HTMLElement>("[data-wt-unpinned]").forEach((el) => {
+        el.style.position = el.getAttribute("data-wt-unpinned") || "";
+        el.removeAttribute("data-wt-unpinned");
+      });
+    }
+  };
+
   const focus = (prefix: string | null) => {
     const target = prefix === null ? null : sectionFor(prefix);
     if (prefix !== null && !target) return;
     clearClass("wt-focus-on");
     document.documentElement.classList.toggle("wt-focusmode", !!target);
+    setPinning(!!target);
     if (target) target.classList.add("wt-focus-on");
   };
 
