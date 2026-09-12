@@ -297,16 +297,18 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   let lastInView: string | null = null;
   const reportInView = () => {
     if (!editable) return;
-    const line = innerHeight * 0.34; // a third down the viewport reads as "what I am looking at"
-    let bestEl: Element | null = null;
-    let bestDist = Infinity;
-    allWtElements().forEach((el) => {
-      const r = sectionOf(el).getBoundingClientRect();
-      if (r.bottom < 0 || r.top > innerHeight || (!r.width && !r.height)) return;
-      const dist = r.top <= line && r.bottom >= line ? 0 : Math.min(Math.abs(r.top - line), Math.abs(r.bottom - line));
-      if (dist < bestDist) { bestDist = dist; bestEl = el; }
-    });
-    const key = bestEl ? (bestEl as Element).getAttribute("data-wt") : null;
+    // Ask what is actually painted a third of the way down, rather than which boxes overlap
+    // that line: a sticky hero stays behind the whole page and would otherwise always win.
+    const line = innerHeight * 0.34;
+    let key: string | null = null;
+    for (const x of [innerWidth * 0.5, innerWidth * 0.25, innerWidth * 0.75]) {
+      const el = document.elementFromPoint(x, line);
+      if (!el || el.closest("#wt-rings")) continue;
+      const direct = el.closest("[data-wt]");
+      if (direct) { key = direct.getAttribute("data-wt"); break; }
+      const inner = sectionOf(el).querySelector("[data-wt]");
+      if (inner) { key = inner.getAttribute("data-wt"); break; }
+    }
     if (!key || key === lastInView) return;
     lastInView = key;
     post({ type: "wt-inview", key });
