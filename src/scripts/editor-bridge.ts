@@ -5,6 +5,8 @@
 //
 // Changelog:
 //   2026-09-12: wt-highlight / wt-focus / wt-outline, sections in wt-ready, preview-deploy origins.
+//   2026-09-12e: wt-outline can scroll its element into view, so touching a field in the
+//               dashboard brings that part of the page to the client.
 //   2026-09-12d: rings follow the page while it scrolls; wt-inview reports the section on
 //               screen; the highlighted section carries a name tag.
 //   2026-09-12c: resolve the editable element by hit-testing descendants, so text inside a
@@ -32,7 +34,8 @@
 //   ← parent  { type: "wt-highlight", prefix: string | null } outline + scroll to the section owning
 //                                                          the first key matching prefix; null clears
 //   ← parent  { type: "wt-focus", prefix: string | null }  dim every other section (no scroll); null clears
-//   ← parent  { type: "wt-outline", key: string | null }   ring every [data-wt=key] element; null clears
+//   ← parent  { type: "wt-outline", key: string | null, scroll?: boolean }  ring every [data-wt=key]
+//                                                        element, optionally scrolling it into view; null clears
 //   → parent  { type: "wt-inview", key: string }         a section scrolled into view, carrying one of
 //                                                        its keys so the dashboard can resolve it
 //
@@ -178,8 +181,16 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     if (target) target.classList.add("wt-focus-on");
   };
 
-  const outline = (key: string | null) => {
-    setRing("outline", key === null ? null : document.querySelector(`[data-wt="${cssEscape(key)}"]`));
+  const outline = (key: string | null, scroll?: boolean) => {
+    const el = key === null ? null : document.querySelector(`[data-wt="${cssEscape(key)}"]`);
+    setRing("outline", el);
+    // Only move the page when the element is actually out of sight — scrolling on every
+    // keystroke or hover would yank the canvas around while the client is working.
+    if (!el || !scroll) return;
+    const r = el.getBoundingClientRect();
+    if (r.top >= 64 && r.bottom <= innerHeight - 48) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ block: "center", behavior: reduceMotion ? "auto" : "smooth" });
   };
 
   // --- Rings: hover / selected / outline, drawn in a fixed layer -------------
@@ -334,6 +345,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
         value?: unknown;
         prefix?: string | null;
         name?: string;
+        scroll?: boolean;
       } | null;
       if (!data || typeof data !== "object") return;
       if (data.type === "wt-content" && data.content && typeof data.content === "object") {
@@ -345,7 +357,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
       } else if (data.type === "wt-focus" && (data.prefix === null || typeof data.prefix === "string")) {
         focus(data.prefix);
       } else if (data.type === "wt-outline" && (data.key === null || typeof data.key === "string")) {
-        outline(data.key);
+        outline(data.key, data.scroll === true);
       }
     } catch {
       // never throw into the page
