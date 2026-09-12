@@ -5,6 +5,9 @@
 //
 // Changelog:
 //   2026-09-12: wt-highlight / wt-focus / wt-outline, sections in wt-ready, preview-deploy origins.
+//   2026-09-12b: rings drawn in an overlay layer (outlines were clipped by overflow:hidden
+//               ancestors), full-viewport fixed overlays parked while editing, and every
+//               link/button/form click neutralised so the canvas can't navigate away.
 //
 // Two modes:
 //   ?wt-edit=1    full editing surface — hover outlines, click-to-select,
@@ -149,6 +152,10 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
       target.setAttribute("data-wt-pos", "");
     }
     target.classList.add("wt-section-on");
+    // Editing the popup? Bring it back on screen; otherwise keep every modal parked.
+    unparkFor(target);
+    parkOverlays();
+    if (getComputedStyle(target).position === "fixed") return; // a modal is already in view
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
   };
@@ -163,9 +170,84 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   };
 
   const outline = (key: string | null) => {
-    clearClass("wt-outline");
-    if (key === null) return;
-    document.querySelectorAll(`[data-wt="${cssEscape(key)}"]`).forEach((el) => el.classList.add("wt-outline"));
+    setRing("outline", key === null ? null : document.querySelector(`[data-wt="${cssEscape(key)}"]`));
+  };
+
+  // --- Rings: hover / selected / outline, drawn in a fixed layer -------------
+  const ringTargets: Record<string, Element | null> = { hover: null, selected: null, outline: null };
+  let ringLayer: HTMLElement | null = null;
+  let ringFrame = 0;
+
+  const ringEl = (name: string): HTMLElement => {
+    if (!ringLayer) {
+      ringLayer = document.createElement("div");
+      ringLayer.id = "wt-rings";
+      document.body.appendChild(ringLayer);
+    }
+    let el = document.getElementById("wt-ring-" + name);
+    if (!el) {
+      el = document.createElement("i");
+      el.id = "wt-ring-" + name;
+      ringLayer.appendChild(el);
+    }
+    return el;
+  };
+
+  const paintRings = () => {
+    ringFrame = 0;
+    (Object.keys(ringTargets) as string[]).forEach((name) => {
+      const target = ringTargets[name];
+      const el = ringEl(name);
+      if (!target || !target.isConnected) {
+        el.classList.remove("on");
+        return;
+      }
+      const r = target.getBoundingClientRect();
+      if (!r.width && !r.height) {
+        el.classList.remove("on");
+        return;
+      }
+      // 2px of breathing room so the ring sits just outside the text it marks.
+      el.style.left = r.left - 2 + "px";
+      el.style.top = r.top - 2 + "px";
+      el.style.width = r.width + 4 + "px";
+      el.style.height = r.height + 4 + "px";
+      el.classList.add("on");
+    });
+  };
+  const queueRings = () => {
+    if (!ringFrame) ringFrame = requestAnimationFrame(paintRings);
+  };
+  const setRing = (name: string, target: Element | null) => {
+    ringTargets[name] = target;
+    queueRings();
+  };
+  addEventListener("scroll", queueRings, true);
+  addEventListener("resize", queueRings);
+
+  // --- Parked overlays -------------------------------------------------------
+  // Anything fixed-position that covers most of the viewport (a registration popup, a cookie
+  // wall, a nav drawer) is a modal: while editing it hides the page and eats every click.
+  const isBlockingOverlay = (el: Element): boolean => {
+    const st = getComputedStyle(el);
+    if (st.position !== "fixed" || st.display === "none" || st.visibility === "hidden") return false;
+    if (parseFloat(st.opacity || "1") < 0.05) return false;
+    const r = el.getBoundingClientRect();
+    return r.width >= innerWidth * 0.6 && r.height >= innerHeight * 0.6;
+  };
+  const parkOverlays = () => {
+    if (!editable) return;
+    Array.from(document.body.querySelectorAll("*")).forEach((el) => {
+      if (el.closest("#wt-rings")) return;
+      if (el.classList.contains("wt-parked")) return;
+      if (isBlockingOverlay(el)) el.classList.add("wt-parked");
+    });
+  };
+  // Show a parked overlay again (it is the thing being edited), and park the rest.
+  const unparkFor = (target: Element | null) => {
+    document.querySelectorAll(".wt-parked").forEach((el) => {
+      if (target && (el === target || el.contains(target))) el.classList.remove("wt-parked");
+    });
   };
 
   window.addEventListener("message", (event: MessageEvent) => {
@@ -234,13 +316,23 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     const style = document.createElement("style");
     style.id = "wt-bridge-css";
     style.textContent = `
-      [data-wt].wt-hover { outline: 1px dashed #1E40AF; outline-offset: 2px; cursor: pointer; }
-      [data-wt].wt-selected { outline: 2px solid #1E40AF; outline-offset: 2px; }
+      [data-wt] { cursor: default; }
       .wt-section-on { outline: 3px solid #4A90E2; outline-offset: -3px; transition: outline-color .25s; }
       .wt-section-on::after { content:""; position:absolute; inset:0; pointer-events:none; background:rgba(74,144,226,.10); animation: wtflash 1.2s ease; }
       @keyframes wtflash { from { background: rgba(74,144,226,.28); } }
       html.wt-focusmode section:not(.wt-focus-on), html.wt-focusmode header:not(.wt-focus-on), html.wt-focusmode footer:not(.wt-focus-on) { opacity:.28; filter:saturate(.4); transition: opacity .35s, filter .35s; }
-      .wt-outline { box-shadow: 0 0 0 2px #4A90E2, 0 0 0 6px rgba(74,144,226,.25) !important; border-radius: 4px; }
+      /* Rings live in their own fixed layer: an outline or box-shadow on the element itself is
+         clipped by any overflow:hidden ancestor (e.g. a headline's reveal mask) and can be
+         painted over by a later stacking context. */
+      #wt-rings { position: fixed; inset: 0; z-index: 2147483000; pointer-events: none; }
+      #wt-rings > i { position: fixed; display: none; border-radius: 5px; pointer-events: none; box-sizing: border-box; }
+      #wt-rings > i.on { display: block; }
+      #wt-ring-hover { border: 1px dashed rgba(30,64,175,.85); }
+      #wt-ring-outline { border: 2px solid #4A90E2; box-shadow: 0 0 0 4px rgba(74,144,226,.22); }
+      #wt-ring-selected { border: 2px solid #1E40AF; box-shadow: 0 0 0 4px rgba(30,64,175,.18); }
+      /* A modal/popup that covers the page is parked while editing, so it can never swallow a
+         click meant for the page underneath. wt-highlight on its own keys brings it back. */
+      .wt-parked { display: none !important; }
     `;
     document.head.appendChild(style);
   }
@@ -248,45 +340,55 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   // Hover/selection affordances — edit mode only. Preview mode paints content but never
   // wires up hover outlines, click interception, or wt-select (it's a read-only draft view).
   if (editable) {
-    let selected: Element | null = null;
+    parkOverlays();
+    // Templates open their popup a beat after load, and content patches can re-render one.
+    setTimeout(parkOverlays, 400);
+    setTimeout(parkOverlays, 1500);
 
     document.addEventListener(
       "mouseover",
-      (e) => {
-        const target = (e.target as Element | null)?.closest("[data-wt]");
-        if (target) target.classList.add("wt-hover");
-      },
+      (e) => setRing("hover", (e.target as Element | null)?.closest("[data-wt]") ?? null),
       true
     );
-    document.addEventListener(
-      "mouseout",
-      (e) => {
-        const target = (e.target as Element | null)?.closest("[data-wt]");
-        if (target) target.classList.remove("wt-hover");
-      },
-      true
-    );
+    document.addEventListener("mouseleave", () => setRing("hover", null), true);
+
+    // Nothing on the page may act on a click while editing: a link would navigate the canvas
+    // away (losing wt-edit), a button would fire the site's own JS, a form would submit. The
+    // dashboard's page list is how you move between pages now.
+    const INTERACTIVE = "a, button, [role='button'], input, select, textarea, label, summary, [onclick]";
+    const swallow = (e: Event) => {
+      const t = e.target as Element | null;
+      if (t?.closest(INTERACTIVE)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+    document.addEventListener("mousedown", swallow, true);
+    document.addEventListener("auxclick", swallow, true);
+    document.addEventListener("submit", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    }, true);
+    document.addEventListener("keydown", (e) => {
+      const k = (e as KeyboardEvent).key;
+      if ((k === "Enter" || k === " ") && (e.target as Element | null)?.closest(INTERACTIVE)) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+
     document.addEventListener(
       "click",
       (e) => {
-        // Internal links navigate (the dashboard switches page + re-points the iframe so
-        // wt-edit survives); their labels stay editable via the drawer. External links are
-        // inert — the canvas must never leave the site or drop its edit params.
-        const a = (e.target as Element | null)?.closest("a");
-        if (a) {
-          e.preventDefault();
-          const path = internalPath(a);
-          if (path) post({ type: "wt-navigate", path });
-          return;
-        }
-        const target = (e.target as Element | null)?.closest("[data-wt]");
-        if (!target) return;
+        const t = e.target as Element | null;
+        const target = t?.closest("[data-wt]");
+        // Always kill the default: no navigation, no form post, no site handler.
         e.preventDefault();
+        if (t?.closest(INTERACTIVE) || target) e.stopPropagation();
+        if (!target) return;
         const key = target.getAttribute("data-wt");
         if (!key) return;
-        if (selected) selected.classList.remove("wt-selected");
-        selected = target;
-        target.classList.add("wt-selected");
+        setRing("selected", target);
         post({ type: "wt-select", key });
       },
       true
