@@ -5,6 +5,8 @@
 //
 // Changelog:
 //   2026-09-12: wt-highlight / wt-focus / wt-outline, sections in wt-ready, preview-deploy origins.
+//   2026-09-12f: data-wt-attr="background" paints a CSS background-image, so band images
+//               and empty photo slots are editable and clickable like any other picture.
 //   2026-09-12e: wt-outline can scroll its element into view, so touching a field in the
 //               dashboard brings that part of the page to the client.
 //   2026-09-12d: rings follow the page while it scrolls; wt-inview reports the section on
@@ -36,6 +38,8 @@
 //   ← parent  { type: "wt-focus", prefix: string | null }  dim every other section (no scroll); null clears
 //   ← parent  { type: "wt-outline", key: string | null, scroll?: boolean }  ring every [data-wt=key]
 //                                                        element, optionally scrolling it into view; null clears
+//   → parent  { type: "wt-select", key, sectionKey }   sectionKey is a key from the surrounding
+//                                                        section, so the dashboard can stay on this page
 //   → parent  { type: "wt-inview", key: string }         a section scrolled into view, carrying one of
 //                                                        its keys so the dashboard can resolve it
 //
@@ -97,6 +101,16 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   const applyValue = (el: Element, value: unknown) => {
     const attr = el.getAttribute("data-wt-attr");
     const str = value == null ? "" : String(value);
+    if (attr === "background") {
+      // A picture painted as a CSS background: a parallax band, or the placeholder shown
+      // where a person has no photo yet. Clearing it puts the placeholder back.
+      (el as HTMLElement).style.backgroundImage = str ? `url("${str.replace(/"/g, '\\"')}")` : "";
+      if (str) {
+        (el as HTMLElement).style.backgroundSize = (el as HTMLElement).style.backgroundSize || "cover";
+        (el as HTMLElement).style.backgroundPosition = (el as HTMLElement).style.backgroundPosition || "center";
+      }
+      return;
+    }
     if (attr) {
       // Never clobber an attribute with an empty value — an unset image/link in the
       // draft means "keep what the build shipped", not src=""/href="" (broken image).
@@ -147,7 +161,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     document.querySelectorAll("." + cls).forEach((el) => el.classList.remove(cls));
   };
 
-  const highlight = (prefix: string | null, name?: string) => {
+  const highlight = (prefix: string | null, name?: string, scroll = true) => {
     const target = prefix === null ? null : sectionFor(prefix);
     if (prefix !== null && !target) return; // unknown prefix — leave the page alone
     // Undo the inline position we set for a previous highlight before clearing it.
@@ -167,7 +181,9 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     // Editing the popup? Bring it back on screen; otherwise keep every modal parked.
     unparkFor(target);
     parkOverlays(target);
-    if (getComputedStyle(target).position === "fixed") return; // a modal is already in view
+    // Don't move the page when the client picked this section by clicking it — they are
+    // already looking at it, and yanking the canvas to the section top loses their place.
+    if (!scroll || getComputedStyle(target).position === "fixed") return;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     target.scrollIntoView({ block: "start", behavior: reduceMotion ? "auto" : "smooth" });
     settleRings();
@@ -358,7 +374,7 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
       } else if (data.type === "wt-patch" && typeof data.key === "string") {
         applyPatch(data.key, data.value);
       } else if (data.type === "wt-highlight" && (data.prefix === null || typeof data.prefix === "string")) {
-        highlight(data.prefix, typeof data.name === "string" ? data.name : undefined);
+        highlight(data.prefix, typeof data.name === "string" ? data.name : undefined, data.scroll !== false);
       } else if (data.type === "wt-focus" && (data.prefix === null || typeof data.prefix === "string")) {
         focus(data.prefix);
       } else if (data.type === "wt-outline" && (data.key === null || typeof data.key === "string")) {
@@ -488,7 +504,11 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
         const key = target.getAttribute("data-wt");
         if (!key) return;
         setRing("selected", target);
-        post({ type: "wt-select", key });
+        // Also say which section it sits in on THIS page. Content shown on two pages (a sponsor
+        // logo appears on the home page and the sponsors page) would otherwise send the client
+        // to the other page the moment they clicked it.
+        const sectionKey = sectionOf(target).querySelector("[data-wt]")?.getAttribute("data-wt") ?? null;
+        post({ type: "wt-select", key, sectionKey });
       },
       true
     );
