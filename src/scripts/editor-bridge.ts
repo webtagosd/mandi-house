@@ -5,6 +5,8 @@
 //
 // Changelog:
 //   2026-09-12: wt-highlight / wt-focus / wt-outline, sections in wt-ready, preview-deploy origins.
+//   2026-09-12i: a ring hides itself when its element is off screen or painted over, so a
+//               pinned hero's background stops marking whatever scrolled on top of it.
 //   2026-09-12h: focus mode un-pins sticky sections, so a hero stops sitting behind the rest
 //               of the page while the client steps through it.
 //   2026-09-12g: a sticky section (a pinned hero) is scrolled to by its layout position,
@@ -268,6 +270,23 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
     return el;
   };
 
+  // Has something from elsewhere on the page been drawn over this element? Sampled at a few
+  // points. A scrim, caption or overlay from inside the same section still counts as showing,
+  // since those belong to it; a later section scrolling over a pinned hero does not.
+  const isShowing = (target: Element, r: DOMRect): boolean => {
+    const own = sectionOf(target);
+    const xs = [r.left + r.width * 0.5, r.left + r.width * 0.15, r.right - r.width * 0.15];
+    const ys = [r.top + r.height * 0.5, r.top + r.height * 0.15, r.bottom - r.height * 0.15];
+    for (let i = 0; i < xs.length; i++) {
+      const x = Math.max(1, Math.min(innerWidth - 1, xs[i]));
+      const y = Math.max(1, Math.min(innerHeight - 1, ys[i]));
+      const hit = document.elementFromPoint(x, y);
+      if (!hit) continue;
+      if (hit === target || target.contains(hit) || hit.contains(target) || own.contains(hit)) return true;
+    }
+    return false;
+  };
+
   const paintRings = () => {
     ringFrame = 0;
     (Object.keys(ringTargets) as string[]).forEach((name) => {
@@ -279,6 +298,13 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
       }
       const r = target.getBoundingClientRect();
       if (!r.width && !r.height) {
+        el.classList.remove("on");
+        return;
+      }
+      // Off screen, or covered by something else? Rings are painted in a layer above the page,
+      // so without this a pinned hero's background image keeps marking whatever has scrolled
+      // over the top of it.
+      if (r.bottom <= 0 || r.top >= innerHeight || r.right <= 0 || r.left >= innerWidth || !isShowing(target, r)) {
         el.classList.remove("on");
         return;
       }
@@ -306,7 +332,12 @@ const isAllowedOrigin = (origin: string) => ALLOWED_ORIGINS.includes(origin) || 
   // A smooth scroll finishes over several hundred ms and its scroll events can be throttled,
   // which would leave a ring behind at the old position. Repaint across the whole glide.
   const settleRings = () => [60, 180, 320, 500, 750].forEach((t) => setTimeout(() => anyRing() && paintRings(), t));
-  addEventListener("scroll", () => { if (anyRing()) paintRings(); }, true);
+  addEventListener("scroll", () => {
+    // A hover mark is about where the pointer is, and the pointer has not moved with the page.
+    // Dropping it on scroll is what stops one trailing down the screen after you scroll away.
+    if (ringTargets.hover) setRing("hover", null);
+    if (anyRing()) paintRings();
+  }, true);
   addEventListener("resize", () => { if (anyRing()) paintRings(); });
 
   // --- Parked overlays -------------------------------------------------------
